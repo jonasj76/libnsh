@@ -1,0 +1,13 @@
+# Object files
+*.o
+
+# Dependency files
+*.d
+
+# Libraries
+*.a
+
+# Shared objects
+*.so
+*.so.*
+
