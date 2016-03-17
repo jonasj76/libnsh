@@ -26,6 +26,9 @@
 #include <net-snmp/agent/net-snmp-agent-includes.h>
 
 #define FN_HANDLE(_n) ( nsh_handle_ ## _n )
+#define FN_INDEX(_n)  ( _n ## _index )
+
+#define ENTRY_SIZE(s,e) sizeof(((s*)0)->e)
 
 int __nsh_scalar_handler(u_char type,
 			 int id,

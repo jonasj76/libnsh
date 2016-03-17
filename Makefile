@@ -30,8 +30,8 @@ CPPFLAGS   += -W -Wall
 LDFLAGS    +=
 ARFLAGS    +=
 
-HEADERS     = scalar.h priv.h
-OBJS        = scalar.o
+HEADERS     = scalar.h table.h priv.h
+OBJS        = scalar.o table.o
 DEPS       := $(OBJS:.o=.d)
 
 LIBNAME     = $(NAME)
