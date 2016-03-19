@@ -124,16 +124,17 @@ void nsh_register_table(const char*              name,
  * This will run before an eventual table load to make sure that
  * everything is empty.
  */
-#define nsh_table_free(_name, _table_data, _head)		\
-static void _name(netsnmp_cache *cache, void* vmagic)		\
-{								\
-	_table_data *this, *that;				\
-								\
-	for (this = _head; this; this = that) {			\
-		that = this->next;				\
-		SNMP_FREE (this);				\
-	}							\
-	_head = NULL;						\
+#define nsh_table_free(_name, _table_data, _head)				\
+static void _name(__attribute__ ((unused)) netsnmp_cache *cache,		\
+                  __attribute__ ((unused)) void* vmagic)			\
+{										\
+	_table_data *this, *that;						\
+										\
+	for (this = _head; this; this = that) {					\
+		that = this->next;						\
+		SNMP_FREE (this);						\
+	}									\
+	_head = NULL;								\
 }
 
 /**
@@ -171,7 +172,7 @@ static nsh_table_index_t* FN_INDEX(_name)(void) 				\
 static netsnmp_variable_list* _name (void **loop_context,			\
 				     void **data_context,			\
 				     netsnmp_variable_list *put_index_data,	\
-				     netsnmp_iterator_info *data)		\
+				     __attribute__ ((unused)) netsnmp_iterator_info *data) \
 {										\
 	_table_data *entry = (_table_data*)*loop_context;			\
 	netsnmp_variable_list *idx = put_index_data;				\
