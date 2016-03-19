@@ -25,6 +25,9 @@ MAJOR       = 0
 MINOR       = 1
 VERSION     = $(MAJOR).$(MINOR)
 
+PKG         = $(NAME)-$(VERSION)
+ARCHIVE     = $(PKG).tar.gz
+
 CFLAGS     += -fPIC
 CPPFLAGS   += -W -Wall
 LDFLAGS    +=
@@ -69,6 +72,11 @@ install-dev:
 	$(Q)$(INSTALL) $(STATICLIB) $(DESTDIR)$(libdir)/$(STATICLIB)
 
 install: install-exec install-dev
+
+dist:
+	$(Q)echo "Building .gz tarball of $(PKG) in parent dir..."
+	git archive --format=tar --prefix=$(PKG)/ v$(VERSION) | gzip >../$(ARCHIVE)
+	$(Q)(cd ..; md5sum $(ARCHIVE) | tee $(ARCHIVE).md5)
 
 # Include automatically generated rules
 -include $(DEPS)
