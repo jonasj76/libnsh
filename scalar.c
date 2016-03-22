@@ -25,6 +25,8 @@
 #include <net-snmp/net-snmp-includes.h>
 #include <net-snmp/agent/net-snmp-agent-includes.h>
 
+#include "priv.h"
+
 static int __mode_get(u_char type,
 		      int id,
 		      int (*get_cb)(void *val, int len, int id),
@@ -112,8 +114,8 @@ int __nsh_scalar_handler(u_char type,
 			 int (*get_cb)(void *val, int len, int id),
 			 int get_sz,
 			 long get_arg,
-			 __attribute__ ((unused)) netsnmp_mib_handler *handler,
-			 __attribute__ ((unused)) netsnmp_handler_registration *reginfo,
+			 netsnmp_mib_handler* UNUSED(handler),
+			 netsnmp_handler_registration* UNUSED(reginfo),
 			 netsnmp_agent_request_info *reqinfo,
 			 netsnmp_request_info *requests)
 {

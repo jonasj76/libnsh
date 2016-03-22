@@ -125,8 +125,8 @@ void nsh_register_table(const char*              name,
  * everything is empty.
  */
 #define nsh_table_free(_name, _table_data, _head)				\
-static void _name(__attribute__ ((unused)) netsnmp_cache *cache,		\
-                  __attribute__ ((unused)) void* vmagic)			\
+static void _name(netsnmp_cache* UNUSED(cache), 				\
+                  void* UNUSED(vmagic)) 					\
 {										\
 	_table_data *this, *that;						\
 										\
@@ -172,7 +172,7 @@ static nsh_table_index_t* FN_INDEX(_name)(void) 				\
 static netsnmp_variable_list* _name (void **loop_context,			\
 				     void **data_context,			\
 				     netsnmp_variable_list *put_index_data,	\
-				     __attribute__ ((unused)) netsnmp_iterator_info *data) \
+				     netsnmp_iterator_info* UNUSED(data))	\
 {										\
 	_table_data *entry = (_table_data*)*loop_context;			\
 	netsnmp_variable_list *idx = put_index_data;				\

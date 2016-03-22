@@ -30,13 +30,17 @@
 
 #define ENTRY_SIZE(s,e) sizeof(((s*)0)->e)
 
+#ifndef UNUSED
+#define UNUSED(x) UNUSED_ ## x __attribute__ ((unused))
+#endif
+
 int __nsh_scalar_handler(u_char type,
 			 int id,
 			 int (*get_cb)(void *val, int len, int id),
 			 int get_sz,
 			 long get_arg,
-			 __attribute__ ((unused)) netsnmp_mib_handler *handler,
-			 __attribute__ ((unused)) netsnmp_handler_registration *reginfo,
+			 netsnmp_mib_handler* UNUSED(handler),
+			 netsnmp_handler_registration* UNUSED(reginfo),
 			 netsnmp_agent_request_info *reqinfo,
 			 netsnmp_request_info *requests);
 
