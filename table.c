@@ -80,7 +80,7 @@ static void __mode_get_req(netsnmp_agent_request_info *reqinfo,
 			   nsh_table_entry_t           *entry)
 {
 	long *table_entry = netsnmp_extract_iterator_context(request);
-	uint8_t *ofs = (uint8_t*)(table_entry) + entry->ofs;
+	uint8_t *ofs;
 	int len;
 
 	if (!table_entry || entry == NULL || !entry->len) {
@@ -88,6 +88,7 @@ static void __mode_get_req(netsnmp_agent_request_info *reqinfo,
 		return;
 	}
 
+	ofs = (uint8_t*)(table_entry) + entry->ofs;
 	if (entry->isstring) {
 		len = strlen((const char*)ofs);
 		if (len > entry->len)
