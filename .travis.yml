@@ -1,0 +1,12 @@
+# Travis CI integration -- https://travis-ci.org/jonasj76/libnsh
+
+# Defaults to GNU GCC and autotools: ./configure && make && make test
+language: c
+
+# Test build with both GCC and Clang (LLVM)
+compiler:
+  - gcc
+  - clang
+
+script:
+  - ./autogen.sh
