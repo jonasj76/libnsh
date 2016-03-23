@@ -24,7 +24,7 @@
 #ifndef NSH_SCALAR_H_
 #define NSH_SCALAR_H_
 
-#include "priv.h"
+#include "private.h"
 
 /**
  * nsh_register_scalar - Register a OID scalar handler

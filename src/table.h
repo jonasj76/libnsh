@@ -24,7 +24,9 @@
 #ifndef NSH_TABLE_H_
 #define NSH_TABLE_H_
 
-#include "priv.h"
+#include <stddef.h>
+
+#include "private.h"
 
 /**
  * nsh_table_index_t - Table index struct

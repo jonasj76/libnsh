@@ -25,7 +25,7 @@
 #include <net-snmp/net-snmp-includes.h>
 #include <net-snmp/agent/net-snmp-agent-includes.h>
 
-#include "priv.h"
+#include "private.h"
 
 static int __mode_get(u_char type,
 		      int id,
