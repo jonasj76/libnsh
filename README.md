@@ -7,6 +7,16 @@ the actual requested OID value. This library will try to simplify the MIB coding
 by offer a simple API that hides the duplicated code parts and only focus on the
 parts that is needed to get the actual value for a specific OID.
 
+## Build and installation
+`libnsh` uses GNU's autotools as its build system.
+
+    ./configure
+    make
+    make install   # you probably need to be root for this
+
+When checking out the code from GitHub, use `./autogen.sh` to generate the
+`configure` script.
+
 ## OID
 
 The OID is defined using a `#define` statement. The define **must** have a name
