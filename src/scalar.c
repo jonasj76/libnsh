@@ -82,6 +82,64 @@ static int __mode_get(u_char type,
 	return ret;
 }
 
+static int __set_reserve1(u_char type,
+			  size_t size,
+			  int (*cb)(void *val, int id),
+			  netsnmp_agent_request_info *reqinfo,
+			  netsnmp_request_info *requests)
+{
+	int ret;
+
+	if (!cb) {
+		netsnmp_set_request_error(reqinfo, requests, SNMP_ERR_NOTWRITABLE);
+		return SNMP_ERR_NOTWRITABLE;
+	}
+
+	ret = netsnmp_check_vb_type_and_max_size(requests->requestvb, type, size);
+	if (ret != SNMP_ERR_NOERROR)
+		netsnmp_set_request_error(reqinfo, requests, ret);
+
+	return ret;
+}
+
+static int __set_action(u_char type,
+			size_t len,
+			int id,
+			int (*cb)(void *val, int id),
+			netsnmp_agent_request_info *reqinfo,
+			netsnmp_request_info *requests)
+{
+	int ret = SNMP_ERR_GENERR;
+
+	if (!cb) {
+		netsnmp_set_request_error(reqinfo, requests, SNMP_ERR_NOTWRITABLE);
+		return SNMP_ERR_NOTWRITABLE;
+	}
+
+	switch (type) {
+	case ASN_COUNTER:
+	case ASN_INTEGER:
+	case ASN_TIMETICKS:
+	case ASN_UNSIGNED:
+	case ASN_IPADDRESS:
+		ret = cb(requests->requestvb->val.integer, id);
+		break;
+
+	case ASN_OCTET_STR:
+		ret = cb(requests->requestvb->val.string, id);
+		break;
+
+	case ASN_OBJECT_ID:
+		ret = cb(requests->requestvb->val.objid, id);
+		break;
+	}
+
+	if (ret != SNMP_ERR_NOERROR)
+		netsnmp_request_set_error(requests, ret);
+
+	return ret;
+}
+
 /**
  * __nsh_scalar_handler - Scalar handler
  * @type     : OID type:
@@ -114,8 +172,9 @@ int __nsh_scalar_handler(u_char type,
 			 int (*get_cb)(void *val, int len, int id),
 			 int get_sz,
 			 long get_arg,
-			 netsnmp_mib_handler* UNUSED(handler),
-			 netsnmp_handler_registration* UNUSED(reginfo),
+			 int (*set_cb)(void *val, int id),
+			 netsnmp_mib_handler *UNUSED(handler),
+			 netsnmp_handler_registration *UNUSED(reginfo),
 			 netsnmp_agent_request_info *reqinfo,
 			 netsnmp_request_info *requests)
 {
@@ -124,12 +183,18 @@ int __nsh_scalar_handler(u_char type,
 		return __mode_get(type, id, get_cb, get_sz, get_arg, reqinfo, requests);
 
 	case MODE_SET_RESERVE1:
+		return __set_reserve1(type, get_sz, set_cb, reqinfo, requests);
+
 	case MODE_SET_RESERVE2:
 	case MODE_SET_FREE:
+		return SNMP_ERR_NOERROR;
+
 	case MODE_SET_ACTION:
+		return __set_action(type, get_sz, id, set_cb, reqinfo, requests);
+
 	case MODE_SET_UNDO:
 	case MODE_SET_COMMIT:
-		return SNMP_ERR_READONLY;
+		return SNMP_ERR_NOERROR;
 	}
 
 	return SNMP_ERR_GENERR;

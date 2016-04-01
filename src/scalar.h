@@ -48,6 +48,7 @@
 }
 
 #define nsh_register_scalar_ro(_name) nsh_register_scalar(_name, HANDLER_CAN_RONLY)
+#define nsh_register_scalar_rw(_name) nsh_register_scalar(_name, HANDLER_CAN_RWRITE)
 
 /**
  * nsh_scalar_handler - Create a scalar handler
@@ -69,6 +70,8 @@
  *              If set and @_type is %ASN_OCTET_STR, the value returned is
  *              treated as a string and will be of length strlen() instead of
  *              @_get_sz.
+ * @_set_cb   : Callback function to set OID value.
+ *              If %NULL OID is readonly.
  *
  * This function will create a scalar handler callback. The callback function
  * name will be based on the name of the @_oid parameter, so the same @_oid name
@@ -78,7 +81,7 @@
  * %SNMP_ERR_NOERROR on success.
  */
 #define nsh_scalar_handler(_oid, _type, _id,				\
-			   _get_cb,  _get_sz, _get_arg)			\
+			   _get_cb,  _get_sz, _get_arg, _set_cb)       	\
 static int FN_HANDLE(_oid)(netsnmp_mib_handler *handler,	       	\
 			 netsnmp_handler_registration *reginfo,		\
 			 netsnmp_agent_request_info *reqinfo,		\
@@ -86,21 +89,31 @@ static int FN_HANDLE(_oid)(netsnmp_mib_handler *handler,	       	\
 {									\
 	return __nsh_scalar_handler(_type, _id,				\
 				    _get_cb, _get_sz, _get_arg,		\
+				    _set_cb,				\
 				    handler,				\
 				    reginfo, reqinfo, requests);	\
 }
 
 #define nsh_scalar_handler_const(_oid, _type, _val) \
-        nsh_scalar_handler(_oid, _type, 0, NULL, sizeof(long), _val)
+        nsh_scalar_handler(_oid, _type, 0, NULL, sizeof(long), _val, NULL)
 
 #define nsh_scalar_handler_ro(_oid, _type, _get_cb, _get_sz) \
-        nsh_scalar_handler(_oid, _type, 0, _get_cb, _get_sz, 0)
+        nsh_scalar_handler(_oid, _type, 0, _get_cb, _get_sz, 0, NULL)
+
+#define nsh_scalar_handler_rw(_oid, _type, _get_cb, _get_sz, _set_cb) \
+        nsh_scalar_handler(_oid, _type, 0, _get_cb, _get_sz, 0, _set_cb)
 
 #define nsh_scalar_str_handler_ro(_oid, _get_cb, _max_sz) \
-        nsh_scalar_handler(_oid, ASN_OCTET_STR, 0, _get_cb, _max_sz, 1)
+        nsh_scalar_handler(_oid, ASN_OCTET_STR, 0, _get_cb, _max_sz, 1, NULL)
+
+#define nsh_scalar_str_handler_rw(_oid, _get_cb, _max_sz, _set_cb) \
+        nsh_scalar_handler(_oid, ASN_OCTET_STR, 0, _get_cb, _max_sz, 1, _set_cb)
 
 #define nsh_scalar_group_handler_ro(_oid, _type, _id, _get_cb, _get_sz, _get_arg) \
-        nsh_scalar_handler(_oid, _type, _id, _get_cb, _get_sz, _get_arg)
+        nsh_scalar_handler(_oid, _type, _id, _get_cb, _get_sz, _get_arg, NULL)
+
+#define nsh_scalar_group_handler_rw(_oid, _type, _id, _get_cb, _get_sz, _get_arg, _set_cb) \
+        nsh_scalar_handler(_oid, _type, _id, _get_cb, _get_sz, _get_arg, _set_cb)
 
 #endif /* NSH_SCALAR_H_ */
 

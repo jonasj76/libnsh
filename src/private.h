@@ -39,8 +39,9 @@ int __nsh_scalar_handler(u_char type,
 			 int (*get_cb)(void *val, int len, int id),
 			 int get_sz,
 			 long get_arg,
-			 netsnmp_mib_handler* UNUSED(handler),
-			 netsnmp_handler_registration* UNUSED(reginfo),
+			 int (*set_cb)(void *val, int id),
+			 netsnmp_mib_handler *UNUSED(handler),
+			 netsnmp_handler_registration *UNUSED(reginfo),
 			 netsnmp_agent_request_info *reqinfo,
 			 netsnmp_request_info *requests);
 
