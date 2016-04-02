@@ -1,4 +1,6 @@
 # libnsh
+[![Build Status](https://travis-ci.org/jonasj76/libnsh.svg?branch=master)](https://travis-ci.org/jonasj76/libnsh)
+
 Net-SNMP helper C-library.
 
 Coding MIBs can be a long and troblesome process. Much of the code for
