@@ -1,5 +1,5 @@
 AC_PREREQ([2.61])
-AC_INIT([libnsh], [0.1], [https://github.com/jonasj76/libnsh/issues])
+AC_INIT([libnsh], [0.2], [https://github.com/jonasj76/libnsh/issues])
 
 AM_INIT_AUTOMAKE([foreign -Wall -Werror])
 

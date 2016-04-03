@@ -5,4 +5,4 @@ pkginclude_HEADERS = scalar.h table.h private.h
 
 lib_LTLIBRARIES = libnsh.la
 libnsh_la_SOURCES = scalar.c table.c
-libnsh_la_LDFLAGS = -version-info 1:0:1
+libnsh_la_LDFLAGS = -version-info 2:0:2
