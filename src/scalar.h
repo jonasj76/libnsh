@@ -94,7 +94,7 @@ static int FN_HANDLE(_oid)(netsnmp_mib_handler *handler,	       	\
 				    reginfo, reqinfo, requests);	\
 }
 
-#define nsh_scalar_handler_const(_oid, _type, _val) \
+#define nsh_scalar_handler_int(_oid, _val) \
         nsh_scalar_handler(_oid, ASN_INTEGER, 0, NULL, sizeof(long), _val, NULL)
 
 #define nsh_scalar_handler_ro(_oid, _type, _get_cb, _get_sz) \
@@ -114,6 +114,10 @@ static int FN_HANDLE(_oid)(netsnmp_mib_handler *handler,	       	\
 
 #define nsh_scalar_group_handler_rw(_oid, _type, _id, _get_cb, _get_sz, _get_arg, _set_cb) \
         nsh_scalar_handler(_oid, _type, _id, _get_cb, _get_sz, _get_arg, _set_cb)
+
+/* deprecated functions */
+#define nsh_scalar_handler_const(_oid, _type, _val) \
+        nsh_scalar_handler_int(_oid, _val)
 
 #endif /* NSH_SCALAR_H_ */
 
