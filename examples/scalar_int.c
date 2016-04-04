@@ -13,7 +13,7 @@
 #define oid_netSnmpPlaypen 1, 3, 6, 1, 4, 1, 8072, 9999, 9999
 #define oid_exampleOid     oid_netSnmpPlaypen, 1
 
-nsh_scalar_handler_const(exampleOid, ASN_INTEGER, 10);
+nsh_scalar_handler_int(exampleOid, 10);
 
 int main(void)
 {
