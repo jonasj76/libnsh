@@ -95,7 +95,7 @@ static int FN_HANDLE(_oid)(netsnmp_mib_handler *handler,	       	\
 }
 
 #define nsh_scalar_handler_const(_oid, _type, _val) \
-        nsh_scalar_handler(_oid, _type, 0, NULL, sizeof(long), _val, NULL)
+        nsh_scalar_handler(_oid, ASN_INTEGER, 0, NULL, sizeof(long), _val, NULL)
 
 #define nsh_scalar_handler_ro(_oid, _type, _get_cb, _get_sz) \
         nsh_scalar_handler(_oid, _type, 0, _get_cb, _get_sz, 0, NULL)

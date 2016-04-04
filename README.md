@@ -48,8 +48,8 @@ same parameter as passed to `nsh_register_scalar_ro()`.
     nsh_scalar_handler_const(name, type, value)
 
 This function will create a handler for the registered `name` OID. A SNMP
-request to the OID will return a `type` of `ASN_COUNTER`, `ASN_INTEGER`,
-`ASN_TIMETICKS`, `ASN_UNSIGNED` or `ASN_IPADDRESS` with the value `value`.
+request to the OID will return a `ASN_INTEGER` with the value `value`. The
+`type` parameter is ignored.
 
 #### Read-only handler
     nsh_scalar_handler_ro(name, type, callback, size)
