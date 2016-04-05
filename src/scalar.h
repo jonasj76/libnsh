@@ -25,6 +25,7 @@
 #define NSH_SCALAR_H_
 
 #include "private.h"
+#include "deprecated.h"
 
 /**
  * nsh_register_scalar - Register a OID scalar handler
@@ -114,10 +115,6 @@ static int FN_HANDLE(_oid)(netsnmp_mib_handler *handler,	       	\
 
 #define nsh_scalar_group_handler_rw(_oid, _type, _id, _get_cb, _get_sz, _get_arg, _set_cb) \
         nsh_scalar_handler(_oid, _type, _id, _get_cb, _get_sz, _get_arg, _set_cb)
-
-/* deprecated functions */
-#define nsh_scalar_handler_const(_oid, _type, _val) \
-        nsh_scalar_handler_int(_oid, _val)
 
 #endif /* NSH_SCALAR_H_ */
 
