@@ -19,6 +19,9 @@ parts that is needed to get the actual value for a specific OID.
 When checking out the code from GitHub, use `./autogen.sh` to generate the
 `configure` script.
 
+## Documentation
+See below and [http://jonasj76.github.io/libnsh][1].
+
 ## OID
 
 The OID is defined using a `#define` statement. The define **must** have a name
@@ -240,3 +243,4 @@ data and the table data list is updated.
     entry->next = table_head;
     table_head  = entry;
 
+[1]: http://jonasj76.github.io/libnsh
