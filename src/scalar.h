@@ -24,72 +24,7 @@
 #ifndef NSH_SCALAR_H_
 #define NSH_SCALAR_H_
 
-#include "private.h"
-
-/**
- * _nsh_register_scalar - Register a OID scalar handler
- * @_name   : OID define. The defined must be named oid_@name and on
- *            format 'x,y,z...'.
- * @_access : HANDLER_CAN_RONLY | HANDLER_CAN_RWRITE
- *
- * This function will register a scalar handler callback for the OID @_oid.
- * The name of the callback function is based on the variable name @_oid,
- * i.e. the same name shall also be used as input to nsh_scalar_handler().
- */
-#define _nsh_register_scalar(_name, _access)				\
-{									\
-	oid _o[] = { oid_ ## _name };					\
-	netsnmp_handler_registration *_reginfo;				\
-									\
-	_reginfo = netsnmp_create_handler_registration(			\
-		#_name, FN_HANDLE(_name), _o, OID_LENGTH(_o), _access);	\
-	if (_reginfo)							\
-		netsnmp_register_scalar(_reginfo);			\
-}
-
-/**
- * _nsh_scalar_handler - Create a scalar handler
- * @_oid      : OID define, see nsh_register_scalar().
- * @_type     : OID type:
- *              %ASN_COUNTER, %ASN_INTEGER, %ASN_TIMETICKS, %ASN_UNSIGNED,
- *              %ASN_IPADDRESS, %ASN_OCTET_STR or %ASN_OBJECT_ID
- * @_id:      : ID in a scalar group, ignored if grouping is not used.
- *              A group of scalar will share the same @_get_cb function and @_id
- *              is used to distinguish the OID requests from each other.
- * @_get_cb   : Callback function to get OID value.
- *              If %NULL and @_type is not set to %ASN_OCTET_STR or
- *              %ASN_OBJECT_ID, the value of @_get_arg will be returned.
- * @_get_sz   : Length of returned value.
- *              When @_type is %ASN_OBJECT_ID this will be the size of OID.
- *              When @_type is %ASN_OCTET_STR this will be the size of the array
- *              or the maximum string size if @_get_arg is set.
- * @_get_arg  : Used as return value if %_get_cb is %NULL.
- *              If set and @_type is %ASN_OCTET_STR, the value returned is
- *              treated as a string and will be of length strlen() instead of
- *              @_get_sz.
- * @_set_cb   : Callback function to set OID value.
- *              If %NULL OID is readonly.
- *
- * This function will create a scalar handler callback. The callback function
- * name will be based on the name of the @_oid parameter, so the same @_oid name
- * shall be used here as when registering the OID with nsh_register_scalar().
- *
- * Returns:
- * %SNMP_ERR_NOERROR on success.
- */
-#define _nsh_scalar_handler(_oid, _type, _id,				\
-			   _get_cb,  _get_sz, _get_arg, _set_cb)       	\
-static int FN_HANDLE(_oid)(netsnmp_mib_handler *handler,	       	\
-			 netsnmp_handler_registration *reginfo,		\
-			 netsnmp_agent_request_info *reqinfo,		\
-			 netsnmp_request_info *requests)		\
-{									\
-	return __nsh_scalar_handler(_type, _id,				\
-				    _get_cb, _get_sz, _get_arg,		\
-				    _set_cb,				\
-				    handler,				\
-				    reginfo, reqinfo, requests);	\
-}
+#include "nsh.h"
 
 #endif /* NSH_SCALAR_H_ */
 

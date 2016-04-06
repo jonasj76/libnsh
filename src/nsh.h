@@ -24,8 +24,8 @@
 #ifndef NSH_H_
 #define NSH_H_
 
-#include "scalar.h"
 #include "table.h"
+#include "private.h"
 #include "deprecated.h"
 
 /**
