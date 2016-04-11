@@ -52,15 +52,15 @@
 	_nsh_register_scalar(name, HANDLER_CAN_RWRITE)
 
 /**
- * Create a constant integer scalar OID handler.
+ * Create a constant scalar OID handler.
  * @param name   OID define, without the \a oid_ prefix.
  * @param type   OID type.
  *               %ASN_COUNTER, %ASN_INTEGER, %ASN_TIMETICKS, %ASN_UNSIGNED or
  *               %ASN_IPADDRESS.
- * @param value  Integer value to be returned by a request.
+ * @param value  Value to be returned by a request.
  *
  * This function will create a scalar handler callback function which will
- * return a constant integer value.
+ * return a constant value.
  * The callback function name will be based on the input parameter \a name,
  * which should be the same parameter used when registering the OID, i.e with
  * nsh_register_scalar_ro().
@@ -96,11 +96,12 @@
  *
  * This function will create a read-only string handler callback function which
  * will return the string from the \a callback function. The function is similar
- * to nsh_scalar_handler_ro() except it will return a string with correct length
- * instead of a string of \a max_length (filled with unknown data at the end of
- * the string).
+ * to nsh_scalar_handler_ro() except it will return a string with the correct
+ * length, i.e. the actual string length instead of the maximum length of the
+ * string.
  * The callback function name will be based on the input parameter \a name,
  * which should be the same parameter used when registering the OID, i.e with
+ * nsh_register_scalar_ro().
  */
 #define nsh_scalar_str_handler_ro(name, callback, max_length) \
 	_nsh_scalar_handler(name, ASN_OCTET_STR, 0, callback, max_length, 1, NULL)
@@ -121,9 +122,10 @@
  * nsh_scalar_handler_ro() except that a \a id is used to distinguish different
  * OID requests. A common \a callback can therefore be shared between several
  * created handlers. If the \a isstring parameter is set, the function behaves
- * as nsh_scalar_str_handler_ro() with repect to the string length.
+ * as nsh_scalar_str_handler_ro(), i.e. with repect to the string length.
  * The callback function name will be based on the input parameter \a name,
  * which should be the same parameter used when registering the OID, i.e with
+ * nsh_register_scalar_ro().
  */
 #define nsh_scalar_group_handler_ro(name, type, id, callback, size, isstring) \
 	_nsh_scalar_handler(name, type, id, callback, size, isstring, NULL)
@@ -141,12 +143,12 @@
  * This function will create a read-write scalar handler callback function. A
  * read request to the OID object will return the value from the \a get_cb
  * callback function. A write request will pass the value to the \a set_cb
- * callback function. If a string value is to* be handler, consider using
+ * callback function. If a string value is to be handled, consider using
  * nsh_scalar_str_handler_rw() instead, else the string returned will always be
  * \a size long.
  * The callback function name will be based on the input parameter \a name,
  * which should be the same parameter used when registering the OID, i.e with
- * nsh_register_scalar_ro().
+ * nsh_register_scalar_rw().
  */
 #define nsh_scalar_handler_rw(name, type, get_cb, size, set_cb) \
 	_nsh_scalar_handler(name, type, 0, get_cb, size, 0, set_cb)
@@ -160,10 +162,11 @@
  *
  * This function will create a read-write string handler callback function. The
  * function is similar to nsh_scalar_handler_rw() except it will return a string
- * with correct length instead of a string of \a max_length (filled with unknown
- * data at the end of the string).
+ * with the correct length, i.e. the actual string length instead of the maximum
+ * length of the string.
  * The callback function name will be based on the input parameter \a name,
  * which should be the same parameter used when registering the OID, i.e with
+ * nsh_register_scalar_rw().
  */
 #define nsh_scalar_str_handler_rw(name, get_cb, max_length, set_cb) \
 	_nsh_scalar_handler(name, ASN_OCTET_STR, 0, get_cb, max_length, 1, set_cb)
@@ -186,9 +189,10 @@
  * OID requests. A common read callback, \a get_cb, and a common write callback,
  * \a set_cb, can therefore be shared between several created handlers. If the
  * \a isstring parameter is set, the function behaves as
- * nsh_scalar_str_handler_rw() with repect to the string length.
+ * nsh_scalar_str_handler_rw(), i.e. with repect to the string length.
  * The callback function name will be based on the input parameter \a name,
  * which should be the same parameter used when registering the OID, i.e with
+ * nsh_register_scalar_rw().
  */
 #define nsh_scalar_group_handler_rw(name, type, id, get_cb, size, isstring, set_cb) \
 	_nsh_scalar_handler(name, type, id, get_cb, size, isstring, set_cb)
