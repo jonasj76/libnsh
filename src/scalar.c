@@ -30,19 +30,14 @@
 static int __mode_get(u_char type,
 		      int id,
 		      int (*get_cb)(void *val, int len, int id),
-		      int get_sz,
+		      int len,
 		      long get_arg,
 		      netsnmp_agent_request_info *reqinfo,
 		      netsnmp_request_info *requests)
 {
-	union {
-		long val_int;
-		char val_octet[get_sz];
-		oid  val_oid[get_sz];
-	} u;
-	void *val = &u;
-	int  len = get_sz;
-	int  ret = SNMP_ERR_GENERR;
+	void *val = NULL;
+	char* buf = NULL;
+	int ret   = SNMP_ERR_GENERR;
 
 	switch (type) {
 	case ASN_COUNTER:
@@ -50,27 +45,23 @@ static int __mode_get(u_char type,
 	case ASN_TIMETICKS:
 	case ASN_UNSIGNED:
 	case ASN_IPADDRESS:
-		if (get_cb) {
-			ret = get_cb(&u.val_int, 0, id);
-		} else {
-			u.val_int = get_arg;
+		/* handle constant value OID */
+		if (!get_cb) {
+			val = &get_arg;
 			ret = SNMP_ERR_NOERROR;
+			break;
 		}
-		break;
-
-	case ASN_OCTET_STR:
-		if (get_cb) {
-			ret = get_cb(u.val_octet, sizeof(u.val_octet), id);
-			if (get_arg)
-				len = strlen(u.val_octet);
-		}
-		break;
-
 	case ASN_OBJECT_ID:
-		if (get_cb) {
-			ret = get_cb(u.val_oid, sizeof(u.val_oid), id);
-			len = sizeof(u.val_oid);
-		}
+	case ASN_OCTET_STR:
+		if (!get_cb)
+			break;
+		/* adjust length for OID-type OID */
+		if (type == ASN_OBJECT_ID)
+			len *= sizeof(oid);
+		val = buf = malloc(len);
+		ret = get_cb(val, len, id);
+		if (get_arg && type == ASN_OCTET_STR)
+			len = strlen(val);
 		break;
 	}
 
@@ -78,6 +69,9 @@ static int __mode_get(u_char type,
 		netsnmp_set_request_error(reqinfo, requests, ret);
 	else
 		snmp_set_var_typed_value(requests->requestvb, type, val, len);
+
+	if (buf)
+		free(val);
 
 	return ret;
 }
