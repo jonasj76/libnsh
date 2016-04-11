@@ -48,10 +48,11 @@ handler. `name` is the defined OID but without the `oid_` prefix, i.e. the
 same parameter as passed to `nsh_register_scalar_ro()`.
 
 #### Constant handler
-    nsh_scalar_handler_int(name, value)
+    nsh_scalar_handler_const(name, type, value)
 
 This function will create a handler for the registered `name` OID. A SNMP
-request to the OID will return a integer with the value `value`.
+request to the OID will return a `ASN_INTEGER` with the value `value`. The
+`type` parameter is ignored.
 
 #### Read-only handler
     nsh_scalar_handler_ro(name, type, callback, size)
