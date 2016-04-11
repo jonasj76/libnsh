@@ -54,7 +54,9 @@
 /**
  * Create a constant integer scalar OID handler.
  * @param name   OID define, without the \a oid_ prefix.
- * @param type   Not used.
+ * @param type   OID type.
+ *               %ASN_COUNTER, %ASN_INTEGER, %ASN_TIMETICKS, %ASN_UNSIGNED or
+ *               %ASN_IPADDRESS.
  * @param value  Integer value to be returned by a request.
  *
  * This function will create a scalar handler callback function which will
@@ -64,7 +66,7 @@
  * nsh_register_scalar_ro().
  */
 #define nsh_scalar_handler_const(name, type, value) \
-        _nsh_scalar_handler(name, ASN_INTEGER, 0, NULL, sizeof(long), value, NULL)
+        _nsh_scalar_handler(name, type, 0, NULL, sizeof(long), value, NULL)
 
 /**
  * Create a read-only scalar OID handler.
