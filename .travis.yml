@@ -10,3 +10,4 @@ compiler:
 
 script:
   - ./autogen.sh
+  - ./configure --enable-examples
