@@ -199,7 +199,7 @@
 
 #endif /* NSH_H_ */
 
-/** @example scalar_int.c */
+/** @example scalar_const.c */
 /** @example scalar_ro.c */
 /** @example scalar_str_ro.c */
 /** @example scalar_group_ro.c */

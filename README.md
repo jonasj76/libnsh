@@ -20,7 +20,12 @@ When checking out the code from GitHub, use `./autogen.sh` to generate the
 `configure` script.
 
 ## Documentation
-See below and [http://jonasj76.github.io/libnsh][1].
+This file and the API reference at [http://jonasj76.github.io/libnsh][1].
+The API reference is also distributed with the source and can be build using
+doxygen.
+
+    cd doc
+    doxygen doxygen.conf
 
 ## OID
 
@@ -56,8 +61,8 @@ parameter as passed to `nsh_register_scalar_ro()` or `nsh_register_scalar_rw()`.
     nsh_scalar_str_handler_rw(name, callback, max_size)
     nsh_scalar_group_handler_rw(name, type, id, callback, size, isstring)
 
-### Callback
-A callback is defined in the following way:
+#### read callback
+A read callback is defined in the following way:
 
     int callback(void *value, int len, int id)
 
@@ -66,6 +71,16 @@ OID. `len` specifies the data size of the requested object, and `id` specifies
 the object which is beeing requested, i.e. to distinguish the requested OID from
 others OIDs if this callback is shared between several handlers, else this
 parameter can be ignored.
+
+#### write callback
+A write callback is defined in the following way:
+
+    int callback(void *value, int id)
+
+The callback function shall use `value` to update the corresponding setting in
+the applications. `id` specifies the object which is beeing updated, i.e. to
+distinguish the requested OID from others OIDs if this callback is shared
+between several handlers, else this parameter can be ignored.
 
 ## Table API
 
