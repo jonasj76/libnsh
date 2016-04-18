@@ -76,18 +76,16 @@ void nsh_register_table(const char*              name,
 				      TABLE_ITERATOR_NAME);
 }
 
-static void __mode_get_req(netsnmp_agent_request_info *reqinfo,
-			   netsnmp_request_info       *request,
-			   nsh_table_entry_t           *entry)
+static int __mode_get_req(netsnmp_agent_request_info *reqinfo,
+			  netsnmp_request_info       *request,
+			  nsh_table_entry_t          *entry)
 {
 	long *table_entry = netsnmp_extract_iterator_context(request);
 	uint8_t *ofs;
-	int len;
+	int len, ret;
 
-	if (!table_entry || entry == NULL || !entry->len) {
-		netsnmp_set_request_error(reqinfo, request, SNMP_NOSUCHINSTANCE);
-		return;
-	}
+	if (!table_entry || !entry || !entry->len)
+		return netsnmp_request_set_error(request, SNMP_NOSUCHINSTANCE);
 
 	ofs = (uint8_t*)(table_entry) + entry->ofs;
 	if (entry->isstring) {
@@ -95,13 +93,17 @@ static void __mode_get_req(netsnmp_agent_request_info *reqinfo,
 		if (len > entry->len)
 			len = entry->len;
 	}
-	else
+	else {
 		len = entry->len;
+	}
 
-	snmp_set_var_typed_value(request->requestvb,
-				 entry->type,
-				 ofs,
-				 len);
+	/* set data to be returned by a snmp request */
+	ret = snmp_set_var_typed_value(request->requestvb, entry->type, ofs, len);
+	if (ret) {
+		return netsnmp_request_set_error(request, SNMP_ERR_GENERR);
+	}
+
+	return SNMP_ERR_NOERROR;
 }
 
 static void __mode_get(netsnmp_agent_request_info *reqinfo,
@@ -118,7 +120,92 @@ static void __mode_get(netsnmp_agent_request_info *reqinfo,
 		if (table_info->colnum <= table_sz)
 			__mode_get_req(reqinfo, request, &table[table_info->colnum-1]);
 		else
-			netsnmp_set_request_error(reqinfo, request, SNMP_NOSUCHOBJECT);
+			netsnmp_request_set_error(request, SNMP_NOSUCHOBJECT);
+	}
+}
+
+static int __set_reserve1_req(netsnmp_agent_request_info *reqinfo,
+			      netsnmp_request_info       *request,
+			      nsh_table_entry_t          *entry)
+{
+	long *table_entry = netsnmp_extract_iterator_context(request);
+	int ret;
+
+	if (!entry || !entry->set_cb)
+		return netsnmp_request_set_error(request, SNMP_ERR_NOTWRITABLE);
+
+	/* check type and size */
+	ret = netsnmp_check_vb_type_and_max_size(request->requestvb, entry->type, entry->len);
+	if (ret != SNMP_ERR_NOERROR) {
+		return netsnmp_request_set_error(request, ret);
+	}
+
+	return ret;
+}
+
+static void __set_reserve1(netsnmp_agent_request_info *reqinfo,
+			   netsnmp_request_info       *requests,
+			   nsh_table_entry_t          *table,
+			   unsigned int               table_sz)
+{
+	netsnmp_request_info *request;
+	netsnmp_table_request_info *table_info;
+
+	for (request = requests; request; request = request->next) {
+		table_info = netsnmp_extract_table_info(request);
+
+		if (table_info->colnum <= table_sz)
+			__set_reserve1_req(reqinfo, request, &table[table_info->colnum-1]);
+		else
+			netsnmp_request_set_error(request, SNMP_ERR_NOTWRITABLE);
+	}
+}
+
+static int __action_req(netsnmp_agent_request_info *reqinfo,
+			netsnmp_request_info       *request,
+			nsh_table_entry_t          *entry)
+{
+	netsnmp_table_request_info *table_info = netsnmp_extract_table_info(request);
+	int ret;
+
+	if (!entry || !entry->set_cb)
+		return netsnmp_request_set_error(request, SNMP_ERR_GENERR);
+
+	switch (entry->type) {
+	case ASN_INTEGER:
+	case ASN_UNSIGNED:
+	case ASN_IPADDRESS:
+		ret = entry->set_cb(*table_info->indexes->val.integer, request->requestvb->val.integer);
+		break;
+	case ASN_OCTET_STR:
+		ret = entry->set_cb(*table_info->indexes->val.integer, request->requestvb->val.string);
+		break;
+	case ASN_OBJECT_ID:
+		ret = entry->set_cb(*table_info->indexes->val.integer, request->requestvb->val.objid);
+		break;
+	default:
+		ret = SNMP_ERR_GENERR;
+	}
+
+	return netsnmp_request_set_error(request, ret);
+}
+
+static void __set_action(netsnmp_agent_request_info *reqinfo,
+			 netsnmp_request_info       *requests,
+			 nsh_table_entry_t          *table,
+			 unsigned int               table_sz)
+{
+	netsnmp_request_info *request;
+	netsnmp_table_request_info *table_info;
+	int ret;
+
+	for (request = requests; request; request = request->next) {
+		table_info = netsnmp_extract_table_info(request);
+
+		if (table_info->colnum <= table_sz)
+			__action_req(reqinfo, request, &table[table_info->colnum-1]);
+		else
+			netsnmp_request_set_error(request, SNMP_ERR_NOTWRITABLE);
 	}
 }
 
@@ -131,10 +218,19 @@ int nsh_handle_table(netsnmp_agent_request_info *reqinfo,
 	case MODE_GET:
 		__mode_get(reqinfo, requests, table, table_sz);
 		break;
+
 	case MODE_SET_RESERVE1:
+		__set_reserve1(reqinfo, requests, table, table_sz);
+		break;
+
 	case MODE_SET_RESERVE2:
 	case MODE_SET_FREE:
+		break;
+
 	case MODE_SET_ACTION:
+		__set_action(reqinfo, requests, table, table_sz);
+		break;
+
 	case MODE_SET_UNDO:
 	case MODE_SET_COMMIT:
 		break;

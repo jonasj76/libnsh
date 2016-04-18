@@ -26,6 +26,10 @@
 
 #include <stddef.h>
 
+#include <net-snmp/net-snmp-config.h>
+#include <net-snmp/net-snmp-includes.h>
+#include <net-snmp/agent/net-snmp-agent-includes.h>
+
 #include "private.h"
 
 /**
@@ -68,6 +72,7 @@ typedef struct nsh_table_entry_t {
 	int len;
 	int ofs;
 	int isstring;
+	int (*set_cb)(long idx, void *value);
 } nsh_table_entry_t;
 
 /**
@@ -77,10 +82,12 @@ typedef struct nsh_table_entry_t {
  * @_obj        : Element in @_table_data.
  * @_isstring   : Element is a string.
  */
-#define NSH_TABLE_ENTRY(_type, _struct, _obj,  _isstring) \
-	{.type = _type, .len = ENTRY_SIZE(_struct, _obj), .ofs = offsetof(struct _struct, _obj), .isstring = _isstring}
+#define NSH_TABLE_ENTRY(_type, _struct, _obj,  _isstring, _set_cb) \
+	{.type = _type, .len = ENTRY_SIZE(_struct, _obj), .ofs = offsetof(struct _struct, _obj), .isstring = _isstring, .set_cb = _set_cb}
 #define NSH_TABLE_ENTRY_RO(_type, _struct, _obj, _isstring) \
-	NSH_TABLE_ENTRY(_type, _struct, _obj, _isstring)
+	NSH_TABLE_ENTRY(_type, _struct, _obj, _isstring, NULL)
+#define NSH_TABLE_ENTRY_RW(_type, _struct, _obj, _isstring, _set_cb) \
+	NSH_TABLE_ENTRY(_type, _struct, _obj, _isstring, _set_cb)
 
 /**
  * nsh_register_table - Register a OID table handler
