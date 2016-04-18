@@ -132,17 +132,17 @@
 
 /**
  * Create a read-write scalar OID handler.
- * @param name    OID define, without the \a oid_ prefix.
- * @param type    OID type.
- *                %ASN_COUNTER, %ASN_INTEGER, %ASN_TIMETICKS, %ASN_UNSIGNED,
- *                %ASN_IPADDRESS, %ASN_OCTET_STR or %ASN_OBJECT_ID.
- * @param get_cb  Callback function to get return value by a request.
- * @param size    Data length of handled value.
- * @param set_cb  Callback function to set value by a request.
+ * @param name        OID define, without the \a oid_ prefix.
+ * @param type        OID type.
+ *                    %ASN_COUNTER, %ASN_INTEGER, %ASN_TIMETICKS, %ASN_UNSIGNED,
+ *                    %ASN_IPADDRESS, %ASN_OCTET_STR or %ASN_OBJECT_ID.
+ * @param nsh_get_cb  Callback function to get return value by a request.
+ * @param size        Data length of handled value.
+ * @param nsh_set_cb  Callback function to set value by a request.
  *
  * This function will create a read-write scalar handler callback function. A
- * read request to the OID object will return the value from the \a get_cb
- * callback function. A write request will pass the value to the \a set_cb
+ * read request to the OID object will return the value from the \a nsh_get_cb
+ * callback function. A write request will pass the value to the \a nsh_set_cb
  * callback function. If a string value is to be handled, consider using
  * nsh_scalar_str_handler_rw() instead, else the string returned will always be
  * \a size long.
@@ -150,15 +150,15 @@
  * which should be the same parameter used when registering the OID, i.e with
  * nsh_register_scalar_rw().
  */
-#define nsh_scalar_handler_rw(name, type, get_cb, size, set_cb) \
-	_nsh_scalar_handler(name, type, 0, get_cb, size, 0, set_cb)
+#define nsh_scalar_handler_rw(name, type, nsh_get_cb, size, nsh_set_cb) \
+	_nsh_scalar_handler(name, type, 0, nsh_get_cb, size, 0, nsh_set_cb)
 
 /**
  * Create a read-write string OID handler.
  * @param name        OID define, without the \a oid_ prefix.
- * @param get_cb      Callback function to get string value by a request.
+ * @param nsh_get_cb  Callback function to get string value by a request.
  * @param max_length  Maximum length of returned string.
- * @param set_cb      Callback function to set value by a request.
+ * @param nsh_set_cb  Callback function to set value by a request.
  *
  * This function will create a read-write string handler callback function. The
  * function is similar to nsh_scalar_handler_rw() except it will return a string
@@ -168,34 +168,61 @@
  * which should be the same parameter used when registering the OID, i.e with
  * nsh_register_scalar_rw().
  */
-#define nsh_scalar_str_handler_rw(name, get_cb, max_length, set_cb) \
-	_nsh_scalar_handler(name, ASN_OCTET_STR, 0, get_cb, max_length, 1, set_cb)
+#define nsh_scalar_str_handler_rw(name, nsh_get_cb, max_length, nsh_set_cb) \
+	_nsh_scalar_handler(name, ASN_OCTET_STR, 0, nsh_get_cb, max_length, 1, nsh_set_cb)
 
 /**
  * Create a grouped read-write scalar OID handler.
- * @param name      OID define, without the \a oid_ prefix.
- * @param type      OID type.
- *                  %ASN_COUNTER, %ASN_INTEGER, %ASN_TIMETICKS, %ASN_UNSIGNED,
- *                  %ASN_IPADDRESS, %ASN_OCTET_STR or %ASN_OBJECT_ID.
- * @param id        Group identifier for this request.
- * @param get_cb    Callback function to get return value by a request.
- * @param size      Data length of handled value.
- * @param isstring  Set if value is a string.
- * @param set_cb    Callback function to set value by a request.
+ * @param name        OID define, without the \a oid_ prefix.
+ * @param type        OID type.
+ *                    %ASN_COUNTER, %ASN_INTEGER, %ASN_TIMETICKS, %ASN_UNSIGNED,
+ *                    %ASN_IPADDRESS, %ASN_OCTET_STR or %ASN_OBJECT_ID.
+ * @param id          Group identifier for this request.
+ * @param nsh_get_cb  Callback function to get return value by a request.
+ * @param size        Data length of handled value.
+ * @param isstring    Set if value is a string.
+ * @param nsh_set_cb  Callback function to set value by a request.
  *
  * This function will create a grouped read-write scalar handler callback
  * function. This function will behave in the same maner as
  * nsh_scalar_handler_rw() except that a \a id is used to distinguish different
- * OID requests. A common read callback, \a get_cb, and a common write callback,
- * \a set_cb, can therefore be shared between several created handlers. If the
- * \a isstring parameter is set, the function behaves as
+ * OID requests. A common read callback, \a nsh_get_cb, and a common write
+ * callback, \a nsh_set_cb, can therefore be shared between several created
+ * handlers. If the \a isstring parameter is set, the function behaves as
  * nsh_scalar_str_handler_rw(), i.e. with repect to the string length.
  * The callback function name will be based on the input parameter \a name,
  * which should be the same parameter used when registering the OID, i.e with
  * nsh_register_scalar_rw().
  */
-#define nsh_scalar_group_handler_rw(name, type, id, get_cb, size, isstring, set_cb) \
-	_nsh_scalar_handler(name, type, id, get_cb, size, isstring, set_cb)
+#define nsh_scalar_group_handler_rw(name, type, id, nsh_get_cb, size, isstring, nsh_set_cb) \
+	_nsh_scalar_handler(name, type, id, nsh_get_cb, size, isstring, nsh_set_cb)
+
+/**
+ * Callback to get (read) value for a get request.
+ * @param value  Pointer to variable which should be \b set to the value that is
+ *               to be returned by a get request.
+ * @param len    Data size (or maximum data size) of \a value.
+ * @param id     ID for the requested OID.
+ *
+ * This callback shall set \a value to the value which should be returned by a
+ * get request. \a len specifies the data size (or maximum data size) for the
+ * requested object. \a id is used to distinguish the requested OID from others
+ * OIDs if the callback is shared between several OID handlers. If the callback
+ * is only used for one OID, \a id can be ignored.
+ */
+typedef int (*nsh_get_cb)(void *value, int len, int id);
+
+/**
+ * Callback to set (write) value for a set request.
+ * @param value  Pointer to variable which holds the value from a set request.
+ * @param id     ID for the requested OID.
+ *
+ * This callback shall use \a value to update the value which should be set by a
+ * set request. \a id is used to distinguish the requested OID from others OIDs
+ * if the callback is shared between several OID handlers. If the callback is
+ * only used for one OID, \a id can be ignored.
+ */
+typedef int (*nsh_set_cb)(void *value, int id);
 
 #endif /* NSH_H_ */
 

@@ -25,11 +25,12 @@
 #include <net-snmp/net-snmp-includes.h>
 #include <net-snmp/agent/net-snmp-agent-includes.h>
 
+#include "nsh.h"
 #include "private.h"
 
 static int __mode_get(u_char type,
 		      int id,
-		      int (*get_cb)(void *val, int len, int id),
+		      nsh_get_cb cb,
 		      int len,
 		      long get_arg,
 		      netsnmp_agent_request_info *reqinfo,
@@ -46,20 +47,20 @@ static int __mode_get(u_char type,
 	case ASN_UNSIGNED:
 	case ASN_IPADDRESS:
 		/* handle constant value OID */
-		if (!get_cb) {
+		if (!cb) {
 			val = &get_arg;
 			ret = SNMP_ERR_NOERROR;
 			break;
 		}
 	case ASN_OBJECT_ID:
 	case ASN_OCTET_STR:
-		if (!get_cb)
+		if (!cb)
 			break;
 		/* adjust length for OID-type OID */
 		if (type == ASN_OBJECT_ID)
 			len *= sizeof(oid);
 		val = buf = malloc(len);
-		ret = get_cb(val, len, id);
+		ret = cb(val, len, id);
 		if (get_arg && type == ASN_OCTET_STR)
 			len = strlen(val);
 		break;
@@ -78,7 +79,7 @@ static int __mode_get(u_char type,
 
 static int __set_reserve1(u_char type,
 			  size_t size,
-			  int (*cb)(void *val, int id),
+			  nsh_set_cb cb,
 			  netsnmp_agent_request_info *reqinfo,
 			  netsnmp_request_info *requests)
 {
@@ -99,7 +100,7 @@ static int __set_reserve1(u_char type,
 static int __set_action(u_char type,
 			size_t len,
 			int id,
-			int (*cb)(void *val, int id),
+			nsh_set_cb cb,
 			netsnmp_agent_request_info *reqinfo,
 			netsnmp_request_info *requests)
 {
@@ -163,10 +164,10 @@ static int __set_action(u_char type,
  */
 int __nsh_scalar_handler(u_char type,
 			 int id,
-			 int (*get_cb)(void *val, int len, int id),
+			 nsh_get_cb get_cb,
 			 int get_sz,
 			 long get_arg,
-			 int (*set_cb)(void *val, int id),
+			 nsh_set_cb set_cb,
 			 netsnmp_mib_handler *UNUSED(handler),
 			 netsnmp_handler_registration *UNUSED(reginfo),
 			 netsnmp_agent_request_info *reqinfo,
