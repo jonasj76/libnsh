@@ -52,17 +52,17 @@ parameter as passed to `nsh_register_scalar_ro()` or `nsh_register_scalar_rw()`.
 
 #### read-only handlers
     nsh_scalar_handler_const(name, type, value)
-    nsh_scalar_handler_ro(name, type, callback, size)
-    nsh_scalar_str_handler_ro(name, callback, max_size)
-    nsh_scalar_group_handler_ro(name, type, id, callback, size, isstring)
+    nsh_scalar_handler_ro(name, type, get_callback, size)
+    nsh_scalar_str_handler_ro(name, get_callback, max_size)
+    nsh_scalar_group_handler_ro(name, type, id, get_callback, size, isstring)
 
 #### read-write handlers
-    nsh_scalar_handler_rw(name, type, callback, size)
-    nsh_scalar_str_handler_rw(name, callback, max_size)
-    nsh_scalar_group_handler_rw(name, type, id, callback, size, isstring)
+    nsh_scalar_handler_rw(name, type, get_callback, size, set_callback)
+    nsh_scalar_str_handler_rw(name, get_callback, max_size, set_callback)
+    nsh_scalar_group_handler_rw(name, type, id, get_callback, size, isstring, set_callback)
 
-#### read callback
-A read callback is defined in the following way:
+#### get callback
+A get callback is defined in the following way:
 
     int callback(void *value, int len, int id)
 
@@ -72,8 +72,8 @@ the object which is beeing requested, i.e. to distinguish the requested OID from
 others OIDs if this callback is shared between several handlers, else this
 parameter can be ignored.
 
-#### write callback
-A write callback is defined in the following way:
+#### set callback
+A set callback is defined in the following way:
 
     int callback(void *value, int id)
 
