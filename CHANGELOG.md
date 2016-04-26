@@ -23,4 +23,4 @@ All notable changes to this project will be documented in this file.
 - Initial release.
 
 [Unreleased]: https://github.com/jonasj76/libnsh/compare/v0.2...HEAD
-[0.2]: https://github.com/jonasj76/libnsh/compare/v0.1...0.2
+[0.2]: https://github.com/jonasj76/libnsh/compare/v0.1...v0.2
