@@ -30,50 +30,58 @@
 
 #define TIMEOUT 5
 
-void nsh_register_table(const char*              name,
-			const oid                *table_oid,
-			size_t                   oid_len,
-			unsigned int             min_column,
-			unsigned int             max_column,
-			int*                     idx_list,
-			int                      num_idx,
-			Netsnmp_Node_Handler     *table_handler,
-			Netsnmp_First_Data_Point *table_get_first,
-			Netsnmp_First_Data_Point *table_get_next,
-			NetsnmpCacheLoad         *table_load_hook,
-			NetsnmpCacheFree         *table_free_hook,
-			int                      access)
+int nsh_register_table(const char*              name,
+		       const oid                *table_oid,
+		       size_t                   oid_len,
+		       unsigned int             min_column,
+		       unsigned int             max_column,
+		       int*                     idx_list,
+		       int                      num_idx,
+		       Netsnmp_Node_Handler     *table_handler,
+		       Netsnmp_First_Data_Point *table_get_first,
+		       Netsnmp_First_Data_Point *table_get_next,
+		       NetsnmpCacheLoad         *table_load_hook,
+		       NetsnmpCacheFree         *table_free_hook,
+		       int                      access)
 {
 	netsnmp_handler_registration    *reg;
-	netsnmp_iterator_info           *iinfo;
 	netsnmp_table_registration_info *table_info;
-	int i;
+	netsnmp_iterator_info           *iinfo;
+	netsnmp_mib_handler             *handler;
+	int ret, i;
 
-	reg = netsnmp_create_handler_registration(name,
-						  table_handler,
-						  table_oid,
-						  oid_len,
-						  access);
+	reg = netsnmp_create_handler_registration(name, table_handler, table_oid, oid_len, access);
+	if (!reg)
+		return MIB_REGISTRATION_FAILED;
 
 	table_info = SNMP_MALLOC_TYPEDEF(netsnmp_table_registration_info);
+	if (!table_info)
+		return MIB_REGISTRATION_FAILED;
 	for (i = 0; i < num_idx; i++)
 		netsnmp_table_helper_add_index(table_info, idx_list[i]);
 	table_info->min_column = min_column;
 	table_info->max_column = max_column;
 
 	iinfo = SNMP_MALLOC_TYPEDEF(netsnmp_iterator_info);
+	if (!iinfo)
+		return MIB_REGISTRATION_FAILED;
 	iinfo->get_first_data_point = table_get_first;
 	iinfo->get_next_data_point  = table_get_next;
 	iinfo->table_reginfo        = table_info;
 
-	netsnmp_register_table_iterator(reg, iinfo);
-	netsnmp_inject_handler_before(reg,
-				      netsnmp_get_cache_handler(TIMEOUT,
-								table_load_hook,
-								table_free_hook,
-								table_oid,
-								oid_len),
-				      TABLE_ITERATOR_NAME);
+	ret = netsnmp_register_table_iterator(reg, iinfo);
+	if (ret != MIB_REGISTERED_OK)
+		return ret;
+
+	handler = netsnmp_get_cache_handler(TIMEOUT, table_load_hook, table_free_hook, table_oid, oid_len);
+	if (!handler)
+		return MIB_REGISTRATION_FAILED;
+
+	ret = netsnmp_inject_handler_before(reg, handler, TABLE_ITERATOR_NAME);
+	if (ret != SNMPERR_SUCCESS)
+		return MIB_REGISTRATION_FAILED;
+
+	return MIB_REGISTERED_OK;
 }
 
 static int __mode_get_req(netsnmp_agent_request_info *reqinfo,

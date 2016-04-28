@@ -109,20 +109,24 @@ typedef struct nsh_table_entry_t {
  * The callbacks for @table_get_first, @table_get_next, @table_load_hook
  * and @table_free_hook can be created by nsh_table_get_first(),
  * nsh_table_get_next(), nsh_table_load_hook() and nsh_table_free_hook() macros.
+ *
+ * Returns:
+ * %MIB_REGISTERED_OK is returned on success.
+ * Failures are %MIB_REGISTRATION_FAILED and %MIB_DUPLICATE_REGISTRATION.
  */
-void nsh_register_table(const char*              name,
-			const oid                *table_oid,
-			size_t                   oid_len,
-			unsigned int             min_column,
-			unsigned int             max_column,
-			int*                     idx_list,
-			int                      num_idx,
-			Netsnmp_Node_Handler     *table_handler,
-			Netsnmp_First_Data_Point *table_get_first,
-			Netsnmp_First_Data_Point *table_get_next,
-			NetsnmpCacheLoad         *table_load_hook,
-			NetsnmpCacheFree         *table_free_hook,
-			int                      access);
+int nsh_register_table(const char*              name,
+		       const oid                *table_oid,
+		       size_t                   oid_len,
+		       unsigned int             min_column,
+		       unsigned int             max_column,
+		       int*                     idx_list,
+		       int                      num_idx,
+		       Netsnmp_Node_Handler     *table_handler,
+		       Netsnmp_First_Data_Point *table_get_first,
+		       Netsnmp_First_Data_Point *table_get_next,
+		       NetsnmpCacheLoad         *table_load_hook,
+		       NetsnmpCacheFree         *table_free_hook,
+		       int                      access);
 
 /**
  * nsh_table_free - Empty table elements
