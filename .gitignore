@@ -14,6 +14,10 @@
 # backup files
 *.*~
 
+# test files
+tests/*.log
+tests/*.trs
+
 # autotools files
 Makefile.in
 aclocal.m4
@@ -28,6 +32,7 @@ depcomp
 install-sh
 ltmain.sh
 missing
+test-driver
 
 # configure files
 Makefile
