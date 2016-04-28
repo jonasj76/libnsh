@@ -56,15 +56,17 @@ int __nsh_scalar_handler(u_char type,
  * i.e. the same name shall also be used as input to nsh_scalar_handler().
  */
 #define _nsh_register_scalar(_name, _access)				\
-{									\
+({									\
 	oid _o[] = { oid_ ## _name };					\
 	netsnmp_handler_registration *_reginfo;				\
+	int _ret = MIB_REGISTERED_OK;					\
 									\
 	_reginfo = netsnmp_create_handler_registration(			\
 		#_name, FN_HANDLE(_name), _o, OID_LENGTH(_o), _access);	\
 	if (_reginfo)							\
-		netsnmp_register_scalar(_reginfo);			\
-}
+		_ret = netsnmp_register_scalar(_reginfo);		\
+	_ret;								\
+})
 
 /**
  * _nsh_scalar_handler - Create a scalar handler

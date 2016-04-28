@@ -35,6 +35,9 @@
  * defined OID. The name of the callback function is based on the input
  * parameter \a name, which means that \a name shall also be the input to the
  * scalar create function which will handle the OID.
+ *
+ * @return %MIB_REGISTERED_OK is returned on success.
+ *         Failures are %MIB_REGISTRATION_FAILED and %MIB_DUPLICATE_REGISTRATION.
  */
 #define nsh_register_scalar_ro(name) \
 	_nsh_register_scalar(name, HANDLER_CAN_RONLY)
@@ -47,6 +50,9 @@
  * defined OID. The name of the callback function is based on the input
  * parameter \a name, which means that \a name shall also be the input to the
  * scalar create function which will handle the OID.
+ *
+ * @return %MIB_REGISTERED_OK is returned on success.
+ *         Failures are %MIB_REGISTRATION_FAILED and %MIB_DUPLICATE_REGISTRATION.
  */
 #define nsh_register_scalar_rw(name) \
 	_nsh_register_scalar(name, HANDLER_CAN_RWRITE)
@@ -64,6 +70,9 @@
  * The callback function name will be based on the input parameter \a name,
  * which should be the same parameter used when registering the OID, i.e with
  * nsh_register_scalar_ro().
+ *
+ * @return %MIB_REGISTERED_OK is returned on success.
+ *         Failures are %MIB_REGISTRATION_FAILED and %MIB_DUPLICATE_REGISTRATION.
  */
 #define nsh_scalar_handler_const(name, type, value) \
         _nsh_scalar_handler(name, type, 0, NULL, sizeof(long), value, NULL)
@@ -84,6 +93,9 @@
  * The callback function name will be based on the input parameter \a name,
  * which should be the same parameter used when registering the OID, i.e with
  * nsh_register_scalar_ro().
+ *
+ * @return %MIB_REGISTERED_OK is returned on success.
+ *         Failures are %MIB_REGISTRATION_FAILED and %MIB_DUPLICATE_REGISTRATION.
  */
 #define nsh_scalar_handler_ro(name, type, callback, size) \
 	_nsh_scalar_handler(name, type, 0, callback, size, 0, NULL)
@@ -102,6 +114,9 @@
  * The callback function name will be based on the input parameter \a name,
  * which should be the same parameter used when registering the OID, i.e with
  * nsh_register_scalar_ro().
+ *
+ * @return %MIB_REGISTERED_OK is returned on success.
+ *         Failures are %MIB_REGISTRATION_FAILED and %MIB_DUPLICATE_REGISTRATION.
  */
 #define nsh_scalar_str_handler_ro(name, callback, max_length) \
 	_nsh_scalar_handler(name, ASN_OCTET_STR, 0, callback, max_length, 1, NULL)
@@ -126,6 +141,9 @@
  * The callback function name will be based on the input parameter \a name,
  * which should be the same parameter used when registering the OID, i.e with
  * nsh_register_scalar_ro().
+ *
+ * @return %MIB_REGISTERED_OK is returned on success.
+ *         Failures are %MIB_REGISTRATION_FAILED and %MIB_DUPLICATE_REGISTRATION.
  */
 #define nsh_scalar_group_handler_ro(name, type, id, callback, size, isstring) \
 	_nsh_scalar_handler(name, type, id, callback, size, isstring, NULL)
@@ -149,6 +167,9 @@
  * The callback function name will be based on the input parameter \a name,
  * which should be the same parameter used when registering the OID, i.e with
  * nsh_register_scalar_rw().
+ *
+ * @return %MIB_REGISTERED_OK is returned on success.
+ *         Failures are %MIB_REGISTRATION_FAILED and %MIB_DUPLICATE_REGISTRATION.
  */
 #define nsh_scalar_handler_rw(name, type, nsh_get_cb, size, nsh_set_cb) \
 	_nsh_scalar_handler(name, type, 0, nsh_get_cb, size, 0, nsh_set_cb)
@@ -167,6 +188,9 @@
  * The callback function name will be based on the input parameter \a name,
  * which should be the same parameter used when registering the OID, i.e with
  * nsh_register_scalar_rw().
+ *
+ * @return %MIB_REGISTERED_OK is returned on success.
+ *         Failures are %MIB_REGISTRATION_FAILED and %MIB_DUPLICATE_REGISTRATION.
  */
 #define nsh_scalar_str_handler_rw(name, nsh_get_cb, max_length, nsh_set_cb) \
 	_nsh_scalar_handler(name, ASN_OCTET_STR, 0, nsh_get_cb, max_length, 1, nsh_set_cb)
@@ -193,6 +217,9 @@
  * The callback function name will be based on the input parameter \a name,
  * which should be the same parameter used when registering the OID, i.e with
  * nsh_register_scalar_rw().
+ *
+ * @return %MIB_REGISTERED_OK is returned on success.
+ *         Failures are %MIB_REGISTRATION_FAILED and %MIB_DUPLICATE_REGISTRATION.
  */
 #define nsh_scalar_group_handler_rw(name, type, id, nsh_get_cb, size, isstring, nsh_set_cb) \
 	_nsh_scalar_handler(name, type, id, nsh_get_cb, size, isstring, nsh_set_cb)
