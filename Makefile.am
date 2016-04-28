@@ -5,7 +5,7 @@ if ENABLE_EXAMPLES
   EXAMPLES     += examples
 endif
 
-SUBDIRS         = src $(EXAMPLES)
+SUBDIRS         = src $(EXAMPLES) tests
 
 EXTRA_DIST      = LICENSE README.md autogen.sh
 
