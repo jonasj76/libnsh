@@ -28,9 +28,7 @@ static nsh_table_index_t idx[] = {
     NSH_TABLE_INDEX (ASN_INTEGER, table_data_t, idx, 0),
 };
 
-nsh_table_free(table_free, table_data_t, table_head)
-nsh_table_get_next(table_get_next, table_data_t, idx, NUM_INDEXES)
-nsh_table_get_first(table_get_first, table_get_next, table_head)
+nsh_table(table_get_first, table_get_next, table_free, table_data_t, table_head, idx, NUM_INDEXES);
 
 static void table_create_entry(long idx,
 			       long data)

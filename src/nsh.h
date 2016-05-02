@@ -251,12 +251,31 @@ typedef int (*nsh_get_cb)(void *value, int len, int id);
  */
 typedef int (*nsh_set_cb)(void *value, int id);
 
+/**
+ * Create table handlers.
+ * @param get_first   Name of table get first handler.
+ * @param get_next    Name of table get next handler.
+ * @param free        Name of table free handler.
+ * @param table_data  Table data struct.
+ * @param head        Head of table data.
+ * @param idx_list    Table index struct.
+ * @param num_idx     Number of indexes in table index struct.
+ *
+ * This function will create table handlers to get first table element, get next
+ * table element and to empty all table elements.
+ */
+#define nsh_table(get_first, get_next, free, table_data, head, idx_list, num_idx) \
+	nsh_table_get_next(get_next, table_data, idx_list, num_idx)	\
+	nsh_table_get_first(get_first, get_next, head)			\
+	nsh_table_free(free, table_data, head)
+
 #endif /* NSH_H_ */
 
 /** @example scalar_const.c */
 /** @example scalar_ro.c */
 /** @example scalar_str_ro.c */
 /** @example scalar_group_ro.c */
+/** @example table.c */
 
 /**
  * Local Variables:
