@@ -14,10 +14,6 @@
 # backup files
 *.*~
 
-# test files
-tests/*.log
-tests/*.trs
-
 # autotools files
 Makefile.in
 aclocal.m4
