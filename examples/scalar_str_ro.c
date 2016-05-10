@@ -6,7 +6,9 @@
 
 #include <stdio.h>
 
-#include "nsh.h"
+#include <nsh.h>
+
+#include "agent.h"
 
 #define oid_netSnmpPlaypen 1, 3, 6, 1, 4, 1, 8072, 9999, 9999
 #define oid_exampleOid     oid_netSnmpPlaypen, 1
@@ -24,11 +26,20 @@ nsh_scalar_str_handler_ro(exampleOid, callback, MAX_STRING_LENGTH);
 
 int main(void)
 {
-	/* TODO: Code to setup SNMP daemon */
+	int err;
 
-	nsh_register_scalar_ro(exampleOid);
+	/* Init SNMP subagent */
+	agent_init();
 
-	/* TODO: Event loop for SNMP requests */
+	/* Register OID */
+	err = nsh_register_scalar_ro(exampleOid);
+	if (err) {
+		fprintf(stderr, "Error registering OID\n");
+		return err;
+	}
+
+	/* Event loop to handle SNMP requests */
+	agent_event_loop();
 }
 
 /**

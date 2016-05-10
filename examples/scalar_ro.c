@@ -1,20 +1,22 @@
 /* libnsh example -- Read-only OID
  *
  * This example will register an OID, 1.3.6.1.4.1.8072.9999.9999.1,
- * which will return a random value when the OID is requested.
+ * which will return an integer value when the OID is requested.
  */
 
 #include <stdlib.h>
 #include <time.h>
 
-#include "nsh.h"
+#include <nsh.h>
+
+#include "agent.h"
 
 #define oid_netSnmpPlaypen 1, 3, 6, 1, 4, 1, 8072, 9999, 9999
 #define oid_exampleOid     oid_netSnmpPlaypen, 1
 
 static int callback(void *value, int len, int id)
 {
-	*(long*)value = rand() % 100;
+	*(long*)value = 10;
 
 	return SNMP_ERR_NOERROR;
 }
@@ -23,13 +25,20 @@ nsh_scalar_handler_ro(exampleOid, ASN_INTEGER, callback, sizeof(long));
 
 int main(void)
 {
-	srand(time(NULL));
+	int err;
 
-	/* TODO: Code to setup SNMP daemon */
+	/* Init SNMP subagent */
+	agent_init();
 
-	nsh_register_scalar_ro(exampleOid);
+	/* Register OID */
+	err = nsh_register_scalar_ro(exampleOid);
+	if (err) {
+		fprintf(stderr, "Error registering OID\n");
+		return err;
+	}
 
-	/* TODO: Event loop for SNMP requests */
+	/* Event loop to handle SNMP requests */
+	agent_event_loop();
 }
 
 /**

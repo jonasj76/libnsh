@@ -2,13 +2,15 @@
  *
  * This example will register two OIDs, 1.3.6.1.4.1.8072.9999.9999.1
  * and 1.3.6.1.4.1.8072.9999.9999.2.
- * .1 will return a random value, and .2 will return a string.
+ * .1 will return an integer value, and .2 will return a string.
  */
 
 #include <stdlib.h>
 #include <time.h>
 
-#include "nsh.h"
+#include <nsh.h>
+
+#include "agent.h"
 
 #define oid_netSnmpPlaypen 1, 3, 6, 1, 4, 1, 8072, 9999, 9999
 #define oid_exampleOidOne  oid_netSnmpPlaypen, 1
@@ -23,7 +25,7 @@ static int callback(void *value, int len, int id)
 {
 	switch(id) {
 	case ID_1:
-		*(long*)value = rand() % 100;
+		*(long*)value = 10;
 		break;
 	case ID_2:
 		snprintf((char*)value, len, "OID string");
@@ -38,14 +40,21 @@ nsh_scalar_group_handler_ro(exampleOidTwo, ASN_OCTET_STR, ID_2, callback, MAX_ST
 
 int main(void)
 {
-	srand(time(NULL));
+	int err = 0;
 
-	/* TODO: Code to setup SNMP daemon */
+	/* Init SNMP subagent */
+	agent_init();
 
-	nsh_register_scalar_ro(exampleOidOne);
-	nsh_register_scalar_ro(exampleOidTwo);
+	/* Register OIDs */
+	err += nsh_register_scalar_ro(exampleOidOne);
+	err += nsh_register_scalar_ro(exampleOidTwo);
+	if (err) {
+		fprintf(stderr, "Error registering OID(s)\n");
+		return err;
+	}
 
-	/* TODO: Event loop for SNMP requests */
+	/* Event loop to handle SNMP requests */
+	agent_event_loop();
 }
 
 /**
