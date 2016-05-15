@@ -260,21 +260,24 @@ typedef int (*nsh_set_cb)(void *value, int id);
  * @param free_cb       Name of table free handler.
  * @param table_data    Table data struct.
  * @param head          Head of table data.
+ * @param num_table     Number of entries in table data struct.
  * @param index_list    Table index struct.
  * @param num_indexes   Number of indexes in table index struct.
  *
  * This function will create table handlers to get first table element, get next
  * table element and to empty all table elements.
  */
-#define nsh_table(name, get_first_cb, get_next_cb, free_cb, table_data, head, index_list, num_indexes) \
+#define nsh_table(name, get_first_cb, get_next_cb, free_cb, table_data, head, num_table, index_list, num_indexes) \
 	nsh_table_get_next(get_next_cb, table_data, index_list, num_indexes) \
 	nsh_table_get_first(get_first_cb, get_next_cb, head)		\
 	nsh_table_free(free_cb, table_data, head)			\
-	nsh_table_reg_t name = {.free      = free_cb,			\
-				.get_first = get_first_cb,		\
-				.get_next  = get_next_cb,		\
-				.idx       = index_list,		\
-				.num_idx   = num_indexes,		\
+	nsh_table_reg_t name = {.free       = free_cb,			\
+				.get_first  = get_first_cb,		\
+				.get_next   = get_next_cb,		\
+				.idx        = index_list,		\
+				.num_idx    = num_indexes,		\
+				.min_column = NSH_DFLT_MIN_COLUMN,	\
+				.max_column = num_table,		\
 	};
 
 #endif /* NSH_H_ */

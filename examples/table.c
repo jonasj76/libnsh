@@ -28,9 +28,7 @@
 #define oid_netSnmpPlaypen 1, 3, 6, 1, 4, 1, 8072, 9999, 9999
 #define oid_exampleOid     oid_netSnmpPlaypen, 1
 
-#define MIN_COLUMN 1
-#define MAX_COLUMN 2
-
+#define NUM_TABLE_ENTRIES 2
 #define NUM_INDEXES 1
 
 typedef struct table_data_t {
@@ -46,7 +44,7 @@ static nsh_table_index_t idx[NUM_INDEXES] = {
     NSH_TABLE_INDEX (ASN_INTEGER, table_data_t, idx, 0),
 };
 
-nsh_table(table_reg, table_get_first, table_get_next, table_free, table_data_t, table_head, idx, NUM_INDEXES);
+nsh_table(table_reg, table_get_first, table_get_next, table_free, table_data_t, table_head, NUM_TABLE_ENTRIES, idx, NUM_INDEXES);
 
 static void table_create_entry(long idx,
 			       long data)
@@ -86,7 +84,7 @@ static int table_handler(netsnmp_mib_handler *handler,
 		NSH_TABLE_ENTRY_RO (ASN_INTEGER, table_data_t, data, 0),
 	};
 
-	return nsh_handle_table(reqinfo, requests, table, MAX_COLUMN);
+	return nsh_handle_table(reqinfo, requests, table, NUM_TABLE_ENTRIES);
 }
 
 int main(void)
@@ -99,8 +97,6 @@ int main(void)
 	nsh_register_table_ro("exampleOid",
 			      table_oid,
 			      OID_LENGTH (table_oid),
-			      MIN_COLUMN,
-			      MAX_COLUMN,
 			      table_handler,
 			      &table_reg,
 			      table_load);

@@ -27,14 +27,13 @@
 
 #include "private.h"
 #include "table.h"
+#include "nsh.h"
 
 #define TIMEOUT 5
 
 static int _nsh_register_table(const char*              name,
 			       const oid                *table_oid,
 			       size_t                   oid_len,
-			       unsigned int             min_column,
-			       unsigned int             max_column,
 			       Netsnmp_Node_Handler     *table_handler,
 			       nsh_table_reg_t          *table_reg,
 			       NetsnmpCacheLoad         *table_load_hook,
@@ -55,8 +54,8 @@ static int _nsh_register_table(const char*              name,
 		return MIB_REGISTRATION_FAILED;
 	for (i = 0; i < table_reg->num_idx; i++)
 		netsnmp_table_helper_add_index(table_info, table_reg->idx[i].type);
-	table_info->min_column = min_column;
-	table_info->max_column = max_column;
+	table_info->min_column = table_reg->min_column;
+	table_info->max_column = table_reg->max_column;
 
 	iinfo = SNMP_MALLOC_TYPEDEF(netsnmp_iterator_info);
 	if (!iinfo)
@@ -83,8 +82,6 @@ static int _nsh_register_table(const char*              name,
 int nsh_register_table_ro(const char*              name,
 			  const oid                *table_oid,
 			  size_t                   oid_len,
-			  unsigned int             min_column,
-			  unsigned int             max_column,
 			  Netsnmp_Node_Handler     *table_handler,
 			  nsh_table_reg_t          *table_reg,
 			  NetsnmpCacheLoad         *table_load_hook)
@@ -92,8 +89,6 @@ int nsh_register_table_ro(const char*              name,
 	return _nsh_register_table(name,
 				   table_oid,
 				   oid_len,
-				   min_column,
-				   max_column,
 				   table_handler,
 				   table_reg,
 				   table_load_hook,
@@ -103,8 +98,6 @@ int nsh_register_table_ro(const char*              name,
 int nsh_register_table_rw(const char*              name,
 			  const oid                *table_oid,
 			  size_t                   oid_len,
-			  unsigned int             min_column,
-			  unsigned int             max_column,
 			  Netsnmp_Node_Handler     *table_handler,
 			  nsh_table_reg_t          *table_reg,
 			  NetsnmpCacheLoad         *table_load_hook)
@@ -112,8 +105,6 @@ int nsh_register_table_rw(const char*              name,
 	return _nsh_register_table(name,
 				   table_oid,
 				   oid_len,
-				   min_column,
-				   max_column,
 				   table_handler,
 				   table_reg,
 				   table_load_hook,
@@ -146,17 +137,17 @@ int nsh_register_table(const char*              name,
 	for (i = 0; i < num_idx; i++) {
 		idx[i].type = idx_list[i];
 	}
-	table_reg.get_first = table_get_first;
-	table_reg.get_next  = table_get_next;
-	table_reg.free      = table_free_hook;
-	table_reg.idx       = idx;
-	table_reg.num_idx   = num_idx;
+	table_reg.get_first  = table_get_first;
+	table_reg.get_next   = table_get_next;
+	table_reg.free       = table_free_hook;
+	table_reg.idx        = idx;
+	table_reg.num_idx    = num_idx;
+	table_reg.min_column = min_column;
+	table_reg.max_column = max_column;
 
 	ret = _nsh_register_table(name,
 				  table_oid,
 				  oid_len,
-				  min_column,
-				  max_column,
 				  table_handler,
 				  &table_reg,
 				  table_load_hook,

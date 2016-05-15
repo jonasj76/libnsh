@@ -94,8 +94,6 @@ typedef struct nsh_table_entry_t {
  * @name            : OID name of table. A string.
  * @table_oid       : OID to register.
  * @oid_len         : Length of OID. Use OID_LENGTH(@table_oid).
- * @min_column      : Fist column to be handled. Usually 1.
- * @max_column      : Last column to be handled.
  * @table_handler   : Name of callback to table handler function.
  * @table_reg       : Table register struct of type @nsh_table_reg_t.
  * @table_load_hook : Name of callback to table load hook function.
@@ -110,8 +108,6 @@ typedef struct nsh_table_entry_t {
 int nsh_register_table_ro(const char*              name,
 			  const oid                *table_oid,
 			  size_t                   oid_len,
-			  unsigned int             min_column,
-			  unsigned int             max_column,
 			  Netsnmp_Node_Handler     *table_handler,
 			  nsh_table_reg_t          *table_reg,
 			  NetsnmpCacheLoad         *table_load_hook);
@@ -121,8 +117,6 @@ int nsh_register_table_ro(const char*              name,
  * @name            : OID name of table. A string.
  * @table_oid       : OID to register.
  * @oid_len         : Length of OID. Use OID_LENGTH(@table_oid).
- * @min_column      : Fist column to be handled. Usually 1.
- * @max_column      : Last column to be handled.
  * @table_handler   : Name of callback to table handler function.
  * @table_reg       : Table register struct of type @nsh_table_reg_t.
  * @table_load_hook : Name of callback to table load hook function.
@@ -137,8 +131,6 @@ int nsh_register_table_ro(const char*              name,
 int nsh_register_table_rw(const char*              name,
 			  const oid                *table_oid,
 			  size_t                   oid_len,
-			  unsigned int             min_column,
-			  unsigned int             max_column,
 			  Netsnmp_Node_Handler     *table_handler,
 			  nsh_table_reg_t          *table_reg,
 			  NetsnmpCacheLoad         *table_load_hook);

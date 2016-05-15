@@ -37,6 +37,8 @@
 #define UNUSED(x) UNUSED_ ## x __attribute__ ((unused))
 #endif
 
+#define NSH_DFLT_MIN_COLUMN 1
+
 typedef netsnmp_variable_list* (*nsh_get_first_cb)(void                  **loop_context,
 						   void                  **data_context,
 						   netsnmp_variable_list *put_index_data,
@@ -58,6 +60,8 @@ typedef struct nsh_table_reg_t {
 	nsh_free_cb               free;
 	struct nsh_table_index_t* idx;
 	int                       num_idx;
+	int                       min_column;
+	int                       max_column;
 } nsh_table_reg_t;
 
 int __nsh_scalar_handler(u_char type,
