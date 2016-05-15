@@ -38,6 +38,7 @@
 #endif
 
 #define NSH_DFLT_MIN_COLUMN 1
+#define NSH_DFLT_TIMEOUT    5
 
 typedef netsnmp_variable_list* (*nsh_get_first_cb)(void                  **loop_context,
 						   void                  **data_context,
@@ -62,6 +63,7 @@ typedef struct nsh_table_reg_t {
 	int                       num_idx;
 	int                       min_column;
 	int                       max_column;
+	int                       timeout;
 } nsh_table_reg_t;
 
 int __nsh_scalar_handler(u_char type,

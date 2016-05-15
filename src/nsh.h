@@ -278,6 +278,7 @@ typedef int (*nsh_set_cb)(void *value, int id);
 				.num_idx    = num_indexes,		\
 				.min_column = NSH_DFLT_MIN_COLUMN,	\
 				.max_column = num_table,		\
+				.timeout    = NSH_DFLT_TIMEOUT,		\
 	};
 
 #endif /* NSH_H_ */

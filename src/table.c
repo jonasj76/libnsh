@@ -29,8 +29,6 @@
 #include "table.h"
 #include "nsh.h"
 
-#define TIMEOUT 5
-
 static int _nsh_register_table(const char*              name,
 			       const oid                *table_oid,
 			       size_t                   oid_len,
@@ -68,7 +66,7 @@ static int _nsh_register_table(const char*              name,
 	if (ret != MIB_REGISTERED_OK)
 		return ret;
 
-	handler = netsnmp_get_cache_handler(TIMEOUT, table_load_hook, table_reg->free, table_oid, oid_len);
+	handler = netsnmp_get_cache_handler(table_reg->timeout, table_load_hook, table_reg->free, table_oid, oid_len);
 	if (!handler)
 		return MIB_REGISTRATION_FAILED;
 
