@@ -140,6 +140,7 @@ int nsh_register_table_rw(const char*              name,
 				   HANDLER_CAN_RWRITE);
 }
 
+/* deprecated */
 int nsh_register_table(const char*              name,
 		       const oid                *table_oid,
 		       size_t                   oid_len,

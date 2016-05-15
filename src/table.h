@@ -90,45 +90,6 @@ typedef struct nsh_table_entry_t {
 	NSH_TABLE_ENTRY(_type, _struct, _obj, _isstring, _set_cb)
 
 /**
- * nsh_register_table - Register a OID table handler
- * @name            : OID name of table. A string.
- * @table_oid       : OID to register.
- * @oid_len         : Length of OID. Use OID_LENGTH(@table_oid).
- * @min_column      : Fist column to be handled. Usually 1.
- * @max_column      : Last column to be handled.
- * @idx_list        : List if indexes. An int array.
- * @num_idx         : Number of indexes in @idx_list.
- * @table_handler   : Name of callback to table handler function.
- * @table_get_first : Name of callback to table get first function.
- * @table_get_next  : Name of callback to table get next function.
- * @table_load_hook : Name of callback to table load hook function.
- * @table_free_hook : Name of callback to table free hook function.
- * @access          : HANDLER_CAN_RONLY | HANDLER_CAN_RWRITE
- *
- * This function will register a tabler handler callback for the OID @table_oid.
- * The callbacks for @table_get_first, @table_get_next, @table_load_hook
- * and @table_free_hook can be created by nsh_table_get_first(),
- * nsh_table_get_next(), nsh_table_load_hook() and nsh_table_free_hook() macros.
- *
- * Returns:
- * %MIB_REGISTERED_OK is returned on success.
- * Failures are %MIB_REGISTRATION_FAILED and %MIB_DUPLICATE_REGISTRATION.
- */
-int nsh_register_table(const char*              name,
-		       const oid                *table_oid,
-		       size_t                   oid_len,
-		       unsigned int             min_column,
-		       unsigned int             max_column,
-		       int*                     idx_list,
-		       int                      num_idx,
-		       Netsnmp_Node_Handler     *table_handler,
-		       Netsnmp_First_Data_Point *table_get_first,
-		       Netsnmp_First_Data_Point *table_get_next,
-		       NetsnmpCacheLoad         *table_load_hook,
-		       NetsnmpCacheFree         *table_free_hook,
-		       int                      access);
-
-/**
  * nsh_register_table_ro - Register a read-only table handler
  * @name            : OID name of table. A string.
  * @table_oid       : OID to register.

@@ -26,6 +26,7 @@
 
 #include "table.h"
 #include "private.h"
+#include "deprecated.h"
 
 /**
  * Register a read-only scalar OID.
