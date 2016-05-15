@@ -46,7 +46,7 @@ static nsh_table_index_t idx[NUM_INDEXES] = {
     NSH_TABLE_INDEX (ASN_INTEGER, table_data_t, idx, 0),
 };
 
-nsh_table(table_get_first, table_get_next, table_free, table_data_t, table_head, idx, NUM_INDEXES);
+nsh_table(table_reg, table_get_first, table_get_next, table_free, table_data_t, table_head, idx, NUM_INDEXES);
 
 static void table_create_entry(long idx,
 			       long data)
@@ -104,10 +104,8 @@ int main(void)
 			      idx,
 			      NUM_INDEXES,
 			      table_handler,
-			      table_get_first,
-			      table_get_next,
-			      table_load,
-			      table_free);
+			      &table_reg,
+			      table_load);
 
 	/* Event loop to handle SNMP requests */
 	agent_event_loop();

@@ -99,15 +99,11 @@ typedef struct nsh_table_entry_t {
  * @idx_list        : Table index struct list of type @nsh_table_index_t.
  * @num_idx         : Number of indexes in @idx_list.
  * @table_handler   : Name of callback to table handler function.
- * @table_get_first : Name of callback to table get first function.
- * @table_get_next  : Name of callback to table get next function.
+ * @table_reg       : Table register struct of type @nsh_table_reg_t.
  * @table_load_hook : Name of callback to table load hook function.
- * @table_free_hook : Name of callback to table free hook function.
  *
  * This function will register a tabler handler callback for the OID @table_oid.
- * The callbacks for @table_get_first, @table_get_next, @table_load_hook
- * and @table_free_hook can be created by nsh_table_get_first(),
- * nsh_table_get_next(), nsh_table_load_hook() and nsh_table_free_hook() macros.
+ * The callbacks for @table_reg struct is created by the nsh_table() macro.
  *
  * Returns:
  * %MIB_REGISTERED_OK is returned on success.
@@ -121,10 +117,8 @@ int nsh_register_table_ro(const char*              name,
 			  nsh_table_index_t        *idx_list,
 			  int                      num_idx,
 			  Netsnmp_Node_Handler     *table_handler,
-			  Netsnmp_First_Data_Point *table_get_first,
-			  Netsnmp_First_Data_Point *table_get_next,
-			  NetsnmpCacheLoad         *table_load_hook,
-			  NetsnmpCacheFree         *table_free_hook);
+			  nsh_table_reg_t          *table_reg,
+			  NetsnmpCacheLoad         *table_load_hook);
 
 /**
  * nsh_register_table_rw - Register a writable table handler
@@ -136,15 +130,11 @@ int nsh_register_table_ro(const char*              name,
  * @idx_list        : Table index struct list of type @nsh_table_index_t.
  * @num_idx         : Number of indexes in @idx_list.
  * @table_handler   : Name of callback to table handler function.
- * @table_get_first : Name of callback to table get first function.
- * @table_get_next  : Name of callback to table get next function.
+ * @table_reg       : Table register struct of type @nsh_table_reg_t.
  * @table_load_hook : Name of callback to table load hook function.
- * @table_free_hook : Name of callback to table free hook function.
  *
  * This function will register a tabler handler callback for the OID @table_oid.
- * The callbacks for @table_get_first, @table_get_next, @table_load_hook
- * and @table_free_hook can be created by nsh_table_get_first(),
- * nsh_table_get_next(), nsh_table_load_hook() and nsh_table_free_hook() macros.
+ * The callbacks for @table_reg struct is created by the nsh_table() macro.
  *
  * Returns:
  * %MIB_REGISTERED_OK is returned on success.
@@ -158,10 +148,8 @@ int nsh_register_table_rw(const char*              name,
 			  nsh_table_index_t        *idx_list,
 			  int                      num_idx,
 			  Netsnmp_Node_Handler     *table_handler,
-			  Netsnmp_First_Data_Point *table_get_first,
-			  Netsnmp_First_Data_Point *table_get_next,
-			  NetsnmpCacheLoad         *table_load_hook,
-			  NetsnmpCacheFree         *table_free_hook);
+			  nsh_table_reg_t          *table_reg,
+			  NetsnmpCacheLoad         *table_load_hook);
 
 /**
  * nsh_table_free - Empty table elements

@@ -25,6 +25,9 @@
 #include <net-snmp/net-snmp-includes.h>
 #include <net-snmp/agent/net-snmp-agent-includes.h>
 
+#ifndef NSH_PRIVATE_H_
+#define NSH_PRIVATE_H_
+
 #define FN_HANDLE(_n) ( nsh_handle_ ## _n )
 #define FN_INDEX(_n)  ( _n ## _index )
 
@@ -33,6 +36,25 @@
 #ifndef UNUSED
 #define UNUSED(x) UNUSED_ ## x __attribute__ ((unused))
 #endif
+
+typedef netsnmp_variable_list* (*nsh_get_first_cb)(void                  **loop_context,
+						   void                  **data_context,
+						   netsnmp_variable_list *put_index_data,
+						   netsnmp_iterator_info *data);
+
+typedef netsnmp_variable_list* (*nsh_get_next_cb)(void                  **loop_context,
+						  void                  **data_context,
+						  netsnmp_variable_list *put_index_data,
+						  netsnmp_iterator_info *data);
+
+typedef void (*nsh_free_cb)(netsnmp_cache *cache,
+			    void          *vmagic);
+
+typedef struct nsh_table_reg_t {
+	nsh_get_first_cb get_first;
+	nsh_get_next_cb  get_next;
+	nsh_free_cb      free;
+} nsh_table_reg_t;
 
 int __nsh_scalar_handler(u_char type,
 			 int id,
@@ -111,6 +133,8 @@ static int FN_HANDLE(_oid)(netsnmp_mib_handler *handler,	       	\
 				    handler,				\
 				    reginfo, reqinfo, requests);	\
 }
+
+#endif /* NSH_PRIVATE_H_ */
 
 /**
  * Local Variables:

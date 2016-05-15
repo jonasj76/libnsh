@@ -38,10 +38,8 @@ static int _nsh_register_table(const char*              name,
 			       nsh_table_index_t        *idx_list,
 			       int                      num_idx,
 			       Netsnmp_Node_Handler     *table_handler,
-			       Netsnmp_First_Data_Point *table_get_first,
-			       Netsnmp_First_Data_Point *table_get_next,
+			       nsh_table_reg_t          *table_reg,
 			       NetsnmpCacheLoad         *table_load_hook,
-			       NetsnmpCacheFree         *table_free_hook,
 			       int                      access)
 {
 	netsnmp_handler_registration    *reg;
@@ -65,15 +63,15 @@ static int _nsh_register_table(const char*              name,
 	iinfo = SNMP_MALLOC_TYPEDEF(netsnmp_iterator_info);
 	if (!iinfo)
 		return MIB_REGISTRATION_FAILED;
-	iinfo->get_first_data_point = table_get_first;
-	iinfo->get_next_data_point  = table_get_next;
+	iinfo->get_first_data_point = table_reg->get_first;
+	iinfo->get_next_data_point  = table_reg->get_next;
 	iinfo->table_reginfo        = table_info;
 
 	ret = netsnmp_register_table_iterator(reg, iinfo);
 	if (ret != MIB_REGISTERED_OK)
 		return ret;
 
-	handler = netsnmp_get_cache_handler(TIMEOUT, table_load_hook, table_free_hook, table_oid, oid_len);
+	handler = netsnmp_get_cache_handler(TIMEOUT, table_load_hook, table_reg->free, table_oid, oid_len);
 	if (!handler)
 		return MIB_REGISTRATION_FAILED;
 
@@ -92,10 +90,8 @@ int nsh_register_table_ro(const char*              name,
 			  nsh_table_index_t        *idx_list,
 			  int                      num_idx,
 			  Netsnmp_Node_Handler     *table_handler,
-			  Netsnmp_First_Data_Point *table_get_first,
-			  Netsnmp_First_Data_Point *table_get_next,
-			  NetsnmpCacheLoad         *table_load_hook,
-			  NetsnmpCacheFree         *table_free_hook)
+			  nsh_table_reg_t          *table_reg,
+			  NetsnmpCacheLoad         *table_load_hook)
 {
 	return _nsh_register_table(name,
 				   table_oid,
@@ -105,10 +101,8 @@ int nsh_register_table_ro(const char*              name,
 				   idx_list,
 				   num_idx,
 				   table_handler,
-				   table_get_first,
-				   table_get_next,
+				   table_reg,
 				   table_load_hook,
-				   table_free_hook,
 				   HANDLER_CAN_RONLY);
 }
 
@@ -120,10 +114,8 @@ int nsh_register_table_rw(const char*              name,
 			  nsh_table_index_t        *idx_list,
 			  int                      num_idx,
 			  Netsnmp_Node_Handler     *table_handler,
-			  Netsnmp_First_Data_Point *table_get_first,
-			  Netsnmp_First_Data_Point *table_get_next,
-			  NetsnmpCacheLoad         *table_load_hook,
-			  NetsnmpCacheFree         *table_free_hook)
+			  nsh_table_reg_t          *table_reg,
+			  NetsnmpCacheLoad         *table_load_hook)
 {
 	return _nsh_register_table(name,
 				   table_oid,
@@ -133,10 +125,8 @@ int nsh_register_table_rw(const char*              name,
 				   idx_list,
 				   num_idx,
 				   table_handler,
-				   table_get_first,
-				   table_get_next,
+				   table_reg,
 				   table_load_hook,
-				   table_free_hook,
 				   HANDLER_CAN_RWRITE);
 }
 
@@ -156,6 +146,7 @@ int nsh_register_table(const char*              name,
 		       int                      access)
 {
 	nsh_table_index_t *idx;
+	nsh_table_reg_t   table_reg;
 	int i, ret;
 
 	idx = calloc(num_idx, sizeof(nsh_table_index_t));
@@ -165,6 +156,9 @@ int nsh_register_table(const char*              name,
 	for (i = 0; i < num_idx; i++) {
 		idx[i].type = idx_list[i];
 	}
+	table_reg.get_first = table_get_first;
+	table_reg.get_next  = table_get_next;
+	table_reg.free      = table_free_hook;
 
 	ret = _nsh_register_table(name,
 				  table_oid,
@@ -174,10 +168,8 @@ int nsh_register_table(const char*              name,
 				  idx,
 				  num_idx,
 				  table_handler,
-				  table_get_first,
-				  table_get_next,
+				  &table_reg,
 				  table_load_hook,
-				  table_free_hook,
 				  access);
 	free(idx);
 
