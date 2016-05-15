@@ -35,8 +35,6 @@ static int _nsh_register_table(const char*              name,
 			       size_t                   oid_len,
 			       unsigned int             min_column,
 			       unsigned int             max_column,
-			       nsh_table_index_t        *idx_list,
-			       int                      num_idx,
 			       Netsnmp_Node_Handler     *table_handler,
 			       nsh_table_reg_t          *table_reg,
 			       NetsnmpCacheLoad         *table_load_hook,
@@ -55,8 +53,8 @@ static int _nsh_register_table(const char*              name,
 	table_info = SNMP_MALLOC_TYPEDEF(netsnmp_table_registration_info);
 	if (!table_info)
 		return MIB_REGISTRATION_FAILED;
-	for (i = 0; i < num_idx; i++)
-		netsnmp_table_helper_add_index(table_info, idx_list[i].type);
+	for (i = 0; i < table_reg->num_idx; i++)
+		netsnmp_table_helper_add_index(table_info, table_reg->idx[i].type);
 	table_info->min_column = min_column;
 	table_info->max_column = max_column;
 
@@ -87,8 +85,6 @@ int nsh_register_table_ro(const char*              name,
 			  size_t                   oid_len,
 			  unsigned int             min_column,
 			  unsigned int             max_column,
-			  nsh_table_index_t        *idx_list,
-			  int                      num_idx,
 			  Netsnmp_Node_Handler     *table_handler,
 			  nsh_table_reg_t          *table_reg,
 			  NetsnmpCacheLoad         *table_load_hook)
@@ -98,8 +94,6 @@ int nsh_register_table_ro(const char*              name,
 				   oid_len,
 				   min_column,
 				   max_column,
-				   idx_list,
-				   num_idx,
 				   table_handler,
 				   table_reg,
 				   table_load_hook,
@@ -111,8 +105,6 @@ int nsh_register_table_rw(const char*              name,
 			  size_t                   oid_len,
 			  unsigned int             min_column,
 			  unsigned int             max_column,
-			  nsh_table_index_t        *idx_list,
-			  int                      num_idx,
 			  Netsnmp_Node_Handler     *table_handler,
 			  nsh_table_reg_t          *table_reg,
 			  NetsnmpCacheLoad         *table_load_hook)
@@ -122,8 +114,6 @@ int nsh_register_table_rw(const char*              name,
 				   oid_len,
 				   min_column,
 				   max_column,
-				   idx_list,
-				   num_idx,
 				   table_handler,
 				   table_reg,
 				   table_load_hook,
@@ -159,14 +149,14 @@ int nsh_register_table(const char*              name,
 	table_reg.get_first = table_get_first;
 	table_reg.get_next  = table_get_next;
 	table_reg.free      = table_free_hook;
+	table_reg.idx       = idx;
+	table_reg.num_idx   = num_idx;
 
 	ret = _nsh_register_table(name,
 				  table_oid,
 				  oid_len,
 				  min_column,
 				  max_column,
-				  idx,
-				  num_idx,
 				  table_handler,
 				  &table_reg,
 				  table_load_hook,

@@ -50,10 +50,14 @@ typedef netsnmp_variable_list* (*nsh_get_next_cb)(void                  **loop_c
 typedef void (*nsh_free_cb)(netsnmp_cache *cache,
 			    void          *vmagic);
 
+struct nsh_table_index_t;
+
 typedef struct nsh_table_reg_t {
-	nsh_get_first_cb get_first;
-	nsh_get_next_cb  get_next;
-	nsh_free_cb      free;
+	nsh_get_first_cb          get_first;
+	nsh_get_next_cb           get_next;
+	nsh_free_cb               free;
+	struct nsh_table_index_t* idx;
+	int                       num_idx;
 } nsh_table_reg_t;
 
 int __nsh_scalar_handler(u_char type,

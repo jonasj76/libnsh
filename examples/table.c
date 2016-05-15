@@ -101,8 +101,6 @@ int main(void)
 			      OID_LENGTH (table_oid),
 			      MIN_COLUMN,
 			      MAX_COLUMN,
-			      idx,
-			      NUM_INDEXES,
 			      table_handler,
 			      &table_reg,
 			      table_load);
