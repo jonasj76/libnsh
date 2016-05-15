@@ -30,19 +30,19 @@
 
 #define TIMEOUT 5
 
-int nsh_register_table(const char*              name,
-		       const oid                *table_oid,
-		       size_t                   oid_len,
-		       unsigned int             min_column,
-		       unsigned int             max_column,
-		       int*                     idx_list,
-		       int                      num_idx,
-		       Netsnmp_Node_Handler     *table_handler,
-		       Netsnmp_First_Data_Point *table_get_first,
-		       Netsnmp_First_Data_Point *table_get_next,
-		       NetsnmpCacheLoad         *table_load_hook,
-		       NetsnmpCacheFree         *table_free_hook,
-		       int                      access)
+static int _nsh_register_table(const char*              name,
+			       const oid                *table_oid,
+			       size_t                   oid_len,
+			       unsigned int             min_column,
+			       unsigned int             max_column,
+			       nsh_table_index_t        *idx_list,
+			       int                      num_idx,
+			       Netsnmp_Node_Handler     *table_handler,
+			       Netsnmp_First_Data_Point *table_get_first,
+			       Netsnmp_First_Data_Point *table_get_next,
+			       NetsnmpCacheLoad         *table_load_hook,
+			       NetsnmpCacheFree         *table_free_hook,
+			       int                      access)
 {
 	netsnmp_handler_registration    *reg;
 	netsnmp_table_registration_info *table_info;
@@ -58,7 +58,7 @@ int nsh_register_table(const char*              name,
 	if (!table_info)
 		return MIB_REGISTRATION_FAILED;
 	for (i = 0; i < num_idx; i++)
-		netsnmp_table_helper_add_index(table_info, idx_list[i]);
+		netsnmp_table_helper_add_index(table_info, idx_list[i].type);
 	table_info->min_column = min_column;
 	table_info->max_column = max_column;
 
@@ -82,6 +82,105 @@ int nsh_register_table(const char*              name,
 		return MIB_REGISTRATION_FAILED;
 
 	return MIB_REGISTERED_OK;
+}
+
+int nsh_register_table_ro(const char*              name,
+			  const oid                *table_oid,
+			  size_t                   oid_len,
+			  unsigned int             min_column,
+			  unsigned int             max_column,
+			  nsh_table_index_t        *idx_list,
+			  int                      num_idx,
+			  Netsnmp_Node_Handler     *table_handler,
+			  Netsnmp_First_Data_Point *table_get_first,
+			  Netsnmp_First_Data_Point *table_get_next,
+			  NetsnmpCacheLoad         *table_load_hook,
+			  NetsnmpCacheFree         *table_free_hook)
+{
+	return _nsh_register_table(name,
+				   table_oid,
+				   oid_len,
+				   min_column,
+				   max_column,
+				   idx_list,
+				   num_idx,
+				   table_handler,
+				   table_get_first,
+				   table_get_next,
+				   table_load_hook,
+				   table_free_hook,
+				   HANDLER_CAN_RONLY);
+}
+
+int nsh_register_table_rw(const char*              name,
+			  const oid                *table_oid,
+			  size_t                   oid_len,
+			  unsigned int             min_column,
+			  unsigned int             max_column,
+			  nsh_table_index_t        *idx_list,
+			  int                      num_idx,
+			  Netsnmp_Node_Handler     *table_handler,
+			  Netsnmp_First_Data_Point *table_get_first,
+			  Netsnmp_First_Data_Point *table_get_next,
+			  NetsnmpCacheLoad         *table_load_hook,
+			  NetsnmpCacheFree         *table_free_hook)
+{
+	return _nsh_register_table(name,
+				   table_oid,
+				   oid_len,
+				   min_column,
+				   max_column,
+				   idx_list,
+				   num_idx,
+				   table_handler,
+				   table_get_first,
+				   table_get_next,
+				   table_load_hook,
+				   table_free_hook,
+				   HANDLER_CAN_RWRITE);
+}
+
+int nsh_register_table(const char*              name,
+		       const oid                *table_oid,
+		       size_t                   oid_len,
+		       unsigned int             min_column,
+		       unsigned int             max_column,
+		       int*                     idx_list,
+		       int                      num_idx,
+		       Netsnmp_Node_Handler     *table_handler,
+		       Netsnmp_First_Data_Point *table_get_first,
+		       Netsnmp_First_Data_Point *table_get_next,
+		       NetsnmpCacheLoad         *table_load_hook,
+		       NetsnmpCacheFree         *table_free_hook,
+		       int                      access)
+{
+	nsh_table_index_t *idx;
+	int i, ret;
+
+	idx = calloc(num_idx, sizeof(nsh_table_index_t));
+	if (!idx)
+		return MIB_REGISTRATION_FAILED;
+
+	for (i = 0; i < num_idx; i++) {
+		idx[i].type = idx_list[i];
+	}
+
+	ret = _nsh_register_table(name,
+				  table_oid,
+				  oid_len,
+				  min_column,
+				  max_column,
+				  idx,
+				  num_idx,
+				  table_handler,
+				  table_get_first,
+				  table_get_next,
+				  table_load_hook,
+				  table_free_hook,
+				  access);
+	free(idx);
+
+	return ret;
 }
 
 static int __mode_get_req(netsnmp_agent_request_info *reqinfo,
