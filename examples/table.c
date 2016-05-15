@@ -21,7 +21,9 @@
  * THE SOFTWARE.
  */
 
-#include "nsh.h"
+#include <nsh.h>
+
+#include "agent.h"
 
 #define oid_netSnmpPlaypen 1, 3, 6, 1, 4, 1, 8072, 9999, 9999
 #define oid_exampleOid     oid_netSnmpPlaypen, 1
@@ -40,7 +42,7 @@ typedef struct table_data_t {
 
 static struct table_data_t *table_head = NULL;
 
-static nsh_table_index_t idx[] = {
+static nsh_table_index_t idx[NUM_INDEXES] = {
     NSH_TABLE_INDEX (ASN_INTEGER, table_data_t, idx, 0),
 };
 
@@ -90,25 +92,25 @@ static int table_handler(netsnmp_mib_handler *handler,
 int main(void)
 {
 	oid table_oid[] = { oid_exampleOid };
-	int index[]     = { ASN_INTEGER };
 
-	/* TODO: Code to setup SNMP daemon */
+	/* Init SNMP subagent */
+	agent_init();
 
-	nsh_register_table("exampleOid",
-			   table_oid,
-			   OID_LENGTH (table_oid),
-			   MIN_COLUMN,
-			   MAX_COLUMN,
-			   index,
-			   NUM_INDEXES,
-			   table_handler,
-			   table_get_first,
-			   table_get_next,
-			   table_load,
-			   table_free,
-			   HANDLER_CAN_RONLY);
+	nsh_register_table_ro("exampleOid",
+			      table_oid,
+			      OID_LENGTH (table_oid),
+			      MIN_COLUMN,
+			      MAX_COLUMN,
+			      idx,
+			      NUM_INDEXES,
+			      table_handler,
+			      table_get_first,
+			      table_get_next,
+			      table_load,
+			      table_free);
 
-	/* TODO: Event loop for SNMP requests */
+	/* Event loop to handle SNMP requests */
+	agent_event_loop();
 }
 
 /**
