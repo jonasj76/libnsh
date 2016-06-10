@@ -121,59 +121,38 @@ to the variable.
 
 ### Table data list functions
 
-    nsh_table_free(name, struct, head)
+    nsh_table(name, get_first, get_next, free, table, head, num_entries, index, num_indexes)
 
-This function will create a *free* function for the table data list. `name` is
-the name of the function that will be created, `struct` is the name of the
-table data struct and `head` is the name of the table data list variable.
-`name` will be of type `NetsnmpCacheFree`.
-
-    nsh_table_get_next(name, struct, index, num_indexes)
-
-This function will create a *get next entry* function for the table data list.
-`name` is the name of the function that will be created, `struct` is the name
-of the table data struct, `index` is the name of the index data struct variable
-and `num_indexes` is the number of indexes in the `index` list. `name`
-will be of type `Netsnmp_Next_Data_Point`.
-
-    nsh_table_get_first(name, get_next, table_head)
-
-This function will create a *get first entry* function for the table data list.
-`name` is the name of the function that will be created, `get_next` is the name
-of the *get next entry* function and `head` is the name of the table data list
-variable. `name` will be of type `Netsnmp_First_Data_Point`.
+This function will create the table data list functions; a *get first entry*
+function named `get_first`, a *get next entry* function named `get_next` and a
+*free* function named `free`. `name` is the name of the table registration
+object that will be created, `table` is the name of the table data struct,
+`head` is the name of the table data list variable, `num_entries` is the number
+of entries in the table (last column in the table to be handled), `index` is
+the name of the index data struct variable and `num_indexes` is the number of
+indexes in the `index` list.
 
 #### Example
-    nsh_table_free(table_free, table_data_t, table_head)
-    nsh_table_get_next(table_get_next, table_data_t, index, 2)
-    nsh_table_get_first(table_get_first, table_get_next, table_head)
+    nsh_table(table_reg, table_get_first, table_get_next, table_free,
+              table_data_t, table_head, 2, index, 2)
 
 ### Register
 
-    nsh_register_table(name, oid, oid_length, min_column, max_column,
-                       index_list, num_indexes,  table_handler, table_get_first,
-                       table_get_next, table_load, table_free, access)
+    nsh_register_table_ro(name, oid, oid_length, table_handler, table_reg, table_load)
+    nsh_register_table_rw(name, oid, oid_length, table_handler, table_reg, table_load)
 
-`name` is a string to identify the the handler.`oid` is the OID to be
+`name` is a string to identify the the handler. `oid` is the OID to be
 registered. `oid_length` is the length of the `oid`. The `OID_LENGTH(oid)`
-shall be used to set this value. `min_column` is the starting column in the
-table, usually 1. `max_column` is the last column in the table to be handled.
-`index_list` is an integer array which holds the table indexes types.
-`num_indexes` is the numer of indexes in `index_list`. `table_handler` is the
-name of the function for the table handler, see below. `table_get_first` is the
-name of the *get first entry* in table data list function. `table_load` is the
-name of the table load function, see below. `table_free` is the name of the
-*free* table entry in table data list function. *access* shall be set to
-`HANDLER_CAN_RONLY`.
+shall be used to set this value. `table_handler` is the name of the function for
+the table handler, see below. `table_reg` is the name of the table registration
+object passed to nsh_table(). `table_load` is the name of the table load
+function, see below.
 
 #### Example
     oid table_oid[] = { oid_exampleOid };
-    int index[]     = { ASN_INTEGER };
 
-    nsh_register_table("exampleOid", table_oid, OID_LENGTH (table_oid),
-                       1, 2 index, 1, table_handler,
-                       table_get_first, table_get_next, table_load, table_free,
-                       HANDLER_CAN_RONLY);
+    nsh_register_table_ro("exampleOid", table_oid, OID_LENGTH (table_oid),
+                          table_handler, &table_reg, table_load);
 
 ### Table handler
 
