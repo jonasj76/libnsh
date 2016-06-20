@@ -4,8 +4,11 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 ### Added
 - Write support for tables.
-- Doxygen documentation on scalar API.
-
+- API documentation in Doxygen.
+- Simplified table handle creation.
+- Ability to change cache timeout value.
+- Updated examples with subagent support.
+- Unit tests.
 ### Fixed
 - OS X Clang compilation.
 
