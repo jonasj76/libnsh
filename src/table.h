@@ -31,6 +31,7 @@
 #include <net-snmp/agent/net-snmp-agent-includes.h>
 
 #include "private.h"
+#include "deprecated.h"
 
 /**
  * nsh_table_index_t - Table index struct
