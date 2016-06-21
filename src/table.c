@@ -142,6 +142,7 @@ int nsh_register_table(const char*              name,
 	table_reg.num_idx    = num_idx;
 	table_reg.min_column = min_column;
 	table_reg.max_column = max_column;
+	table_reg.timeout    = NSH_DFLT_TIMEOUT;
 
 	ret = _nsh_register_table(name,
 				  table_oid,
