@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [0.3] - 2016-06-21
 ### Added
 - Write support for tables.
 - API documentation in Doxygen.
@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Ability to change cache timeout value.
 - Updated examples with subagent support.
 - Unit tests.
+
 ### Fixed
 - OS X Clang compilation.
 
@@ -25,5 +26,5 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Initial release.
 
-[Unreleased]: https://github.com/jonasj76/libnsh/compare/v0.2...HEAD
+[0.3]: https://github.com/jonasj76/libnsh/compare/v0.2...v0.3
 [0.2]: https://github.com/jonasj76/libnsh/compare/v0.1...v0.2
