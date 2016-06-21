@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>libnsh: scalar_str_ro.c</title>
+<title>libnsh: table.c</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -77,10 +77,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div class="header">
   <div class="headertitle">
-<div class="title">scalar_str_ro.c</div>  </div>
+<div class="title">table.c</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><span class="comment">/* libnsh example - String OID</span></div>
+<div class="fragment"><div class="line"><span class="comment">/* libnsh example - Table</span></div>
 <div class="line"><span class="comment"> *</span></div>
 <div class="line"><span class="comment"> * Copyright (c) 2016  Jonas Johansson &lt;jonasj76@gmail.com&gt;</span></div>
 <div class="line"><span class="comment"> *</span></div>
@@ -103,8 +103,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><span class="comment"> * THE SOFTWARE.</span></div>
 <div class="line"><span class="comment"> */</span></div>
 <div class="line"></div>
-<div class="line"><span class="preprocessor">#include &lt;stdio.h&gt;</span></div>
-<div class="line"></div>
 <div class="line"><span class="preprocessor">#include &lt;<a class="code" href="nsh_8h.html">nsh.h</a>&gt;</span></div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor">#include &quot;agent.h&quot;</span></div>
@@ -112,30 +110,78 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><span class="preprocessor">#define oid_netSnmpPlaypen 1, 3, 6, 1, 4, 1, 8072, 9999, 9999</span></div>
 <div class="line"><span class="preprocessor">#define oid_exampleOid     oid_netSnmpPlaypen, 1</span></div>
 <div class="line"></div>
-<div class="line"><span class="preprocessor">#define MAX_STRING_LENGTH 32</span></div>
+<div class="line"><span class="preprocessor">#define NUM_TABLE_ENTRIES 2</span></div>
+<div class="line"><span class="preprocessor">#define NUM_INDEXES 1</span></div>
 <div class="line"></div>
-<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> callback(<span class="keywordtype">void</span> *value, <span class="keywordtype">int</span> len, <span class="keywordtype">int</span> <span class="keywordtype">id</span>)</div>
+<div class="line"><span class="keyword">typedef</span> <span class="keyword">struct </span>table_data_t {</div>
+<div class="line">    <span class="keywordtype">long</span> idx;</div>
+<div class="line">    <span class="keywordtype">long</span> data;</div>
+<div class="line"></div>
+<div class="line">    <span class="keyword">struct </span>table_data_t *next;</div>
+<div class="line">} table_data_t;</div>
+<div class="line"></div>
+<div class="line"><span class="keyword">static</span> <span class="keyword">struct </span>table_data_t *table_head = NULL;</div>
+<div class="line"></div>
+<div class="line"><span class="keyword">static</span> nsh_table_index_t idx[NUM_INDEXES] = {</div>
+<div class="line">    NSH_TABLE_INDEX (ASN_INTEGER, table_data_t, idx, 0),</div>
+<div class="line">};</div>
+<div class="line"></div>
+<div class="line"><a name="a0"></a><a class="code" href="nsh_8h.html#aed66d54a2babe0a92d399ed40ceb737c">nsh_table</a>(table_reg, table_get_first, table_get_next, table_free, table_data_t, table_head, NUM_TABLE_ENTRIES, idx, NUM_INDEXES);</div>
+<div class="line"></div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">void</span> table_create_entry(<span class="keywordtype">long</span> idx,</div>
+<div class="line">                   <span class="keywordtype">long</span> data)</div>
 <div class="line">{</div>
-<div class="line">    snprintf((<span class="keywordtype">char</span>*)value, len, <span class="stringliteral">&quot;OID string&quot;</span>);</div>
+<div class="line">    table_data_t *entry;</div>
 <div class="line"></div>
-<div class="line">    <span class="keywordflow">return</span> SNMP_ERR_NOERROR;</div>
+<div class="line">    entry = SNMP_MALLOC_TYPEDEF (table_data_t);</div>
+<div class="line">    <span class="keywordflow">if</span> (!entry)</div>
+<div class="line">        <span class="keywordflow">return</span>;</div>
+<div class="line"></div>
+<div class="line">    entry-&gt;idx  = idx;</div>
+<div class="line">    entry-&gt;data = data;</div>
+<div class="line"></div>
+<div class="line">    entry-&gt;next = table_head;</div>
+<div class="line">    table_head  = entry;</div>
 <div class="line">}</div>
 <div class="line"></div>
-<div class="line"><a name="a0"></a><a class="code" href="nsh_8h.html#a43cf01aa7e0dc1580aca4308c95b8c78">nsh_scalar_str_handler_ro</a>(exampleOid, callback, MAX_STRING_LENGTH);</div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> table_load (netsnmp_cache *cache, <span class="keywordtype">void</span>* vmagic)</div>
+<div class="line">{</div>
+<div class="line">    <span class="keyword">const</span> <span class="keywordtype">int</span> num_rows = 3;</div>
+<div class="line">    <span class="keywordtype">int</span> row;</div>
+<div class="line"></div>
+<div class="line">    <span class="keywordflow">for</span> (row = 0; row &lt; num_rows; row++) {</div>
+<div class="line">        table_create_entry(row, row*row);</div>
+<div class="line">    }</div>
+<div class="line"></div>
+<div class="line">    <span class="keywordflow">return</span> 0;</div>
+<div class="line">}</div>
+<div class="line"></div>
+<div class="line"><span class="keyword">static</span> <span class="keywordtype">int</span> table_handler(netsnmp_mib_handler *handler,</div>
+<div class="line">             netsnmp_handler_registration *reginfo,</div>
+<div class="line">             netsnmp_agent_request_info *reqinfo,</div>
+<div class="line">             netsnmp_request_info *requests)</div>
+<div class="line">{</div>
+<div class="line">    nsh_table_entry_t table[] = {</div>
+<div class="line">        NSH_TABLE_ENTRY_RO (ASN_INTEGER, table_data_t, idx,  0),</div>
+<div class="line">        NSH_TABLE_ENTRY_RO (ASN_INTEGER, table_data_t, data, 0),</div>
+<div class="line">    };</div>
+<div class="line"></div>
+<div class="line">    <span class="keywordflow">return</span> nsh_handle_table(reqinfo, requests, table, NUM_TABLE_ENTRIES);</div>
+<div class="line">}</div>
 <div class="line"></div>
 <div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">void</span>)</div>
 <div class="line">{</div>
-<div class="line">    <span class="keywordtype">int</span> err;</div>
+<div class="line">    oid table_oid[] = { oid_exampleOid };</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">/* Init SNMP subagent */</span></div>
 <div class="line">    agent_init();</div>
 <div class="line"></div>
-<div class="line">    <span class="comment">/* Register OID */</span></div>
-<div class="line">    err = <a name="a1"></a><a class="code" href="nsh_8h.html#a6afc4a9ba4df6a73b4989ff95aad066f">nsh_register_scalar_ro</a>(exampleOid);</div>
-<div class="line">    <span class="keywordflow">if</span> (err) {</div>
-<div class="line">        fprintf(stderr, <span class="stringliteral">&quot;Error registering OID\n&quot;</span>);</div>
-<div class="line">        <span class="keywordflow">return</span> err;</div>
-<div class="line">    }</div>
+<div class="line">    nsh_register_table_ro(<span class="stringliteral">&quot;exampleOid&quot;</span>,</div>
+<div class="line">                  table_oid,</div>
+<div class="line">                  OID_LENGTH (table_oid),</div>
+<div class="line">                  table_handler,</div>
+<div class="line">                  &amp;table_reg,</div>
+<div class="line">                  table_load);</div>
 <div class="line"></div>
 <div class="line">    <span class="comment">/* Event loop to handle SNMP requests */</span></div>
 <div class="line">    agent_event_loop();</div>

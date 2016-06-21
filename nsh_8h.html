@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">libnsh
-   &#160;<span id="projectnumber">0.2</span>
+   &#160;<span id="projectnumber">0.3</span>
    </div>
    <div id="projectbrief">Net-SNMP helper C-library</div>
   </td>
@@ -87,7 +87,8 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#define-members">Macros</a>  </div>
+<a href="#define-members">Macros</a> &#124;
+<a href="#typedef-members">Typedefs</a>  </div>
   <div class="headertitle">
 <div class="title">nsh.h File Reference</div>  </div>
 </div><!--header-->
@@ -104,20 +105,29 @@ Macros</h2></td></tr>
 <tr class="separator:a6afc4a9ba4df6a73b4989ff95aad066f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae0f69efd83afd6a3ea57507a3ec87d13"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nsh_8h.html#ae0f69efd83afd6a3ea57507a3ec87d13">nsh_register_scalar_rw</a>(name)&#160;&#160;&#160;_nsh_register_scalar(name, HANDLER_CAN_RWRITE)</td></tr>
 <tr class="separator:ae0f69efd83afd6a3ea57507a3ec87d13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af04870c5584bbe471897ebb496cb6b23"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nsh_8h.html#af04870c5584bbe471897ebb496cb6b23">nsh_scalar_handler_int</a>(name,  value)&#160;&#160;&#160;_nsh_scalar_handler(name, ASN_INTEGER, 0, NULL, sizeof(long), value, NULL)</td></tr>
-<tr class="separator:af04870c5584bbe471897ebb496cb6b23"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b0cd3005d981e2566b531b2c0bde005"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nsh_8h.html#a0b0cd3005d981e2566b531b2c0bde005">nsh_scalar_handler_const</a>(name,  type,  value)&#160;&#160;&#160;_nsh_scalar_handler(name, type, 0, NULL, sizeof(long), value, NULL)</td></tr>
+<tr class="separator:a0b0cd3005d981e2566b531b2c0bde005"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe8d30c7633f2d8cb5ed57dc60979c5f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nsh_8h.html#afe8d30c7633f2d8cb5ed57dc60979c5f">nsh_scalar_handler_ro</a>(name,  type,  callback,  size)&#160;&#160;&#160;_nsh_scalar_handler(name, type, 0, callback, size, 0, NULL)</td></tr>
 <tr class="separator:afe8d30c7633f2d8cb5ed57dc60979c5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a43cf01aa7e0dc1580aca4308c95b8c78"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nsh_8h.html#a43cf01aa7e0dc1580aca4308c95b8c78">nsh_scalar_str_handler_ro</a>(name,  callback,  max_length)&#160;&#160;&#160;_nsh_scalar_handler(name, ASN_OCTET_STR, 0, callback, max_length, 1, NULL)</td></tr>
 <tr class="separator:a43cf01aa7e0dc1580aca4308c95b8c78"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae67b3d10c3f2910a331b74c1aa7a0458"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nsh_8h.html#ae67b3d10c3f2910a331b74c1aa7a0458">nsh_scalar_group_handler_ro</a>(name,  type,  id,  callback,  size,  isstring)&#160;&#160;&#160;_nsh_scalar_handler(name, type, id, callback, size, isstring, NULL)</td></tr>
 <tr class="separator:ae67b3d10c3f2910a331b74c1aa7a0458"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4cd0bef8bdd973e39f6f16a6eee5f820"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nsh_8h.html#a4cd0bef8bdd973e39f6f16a6eee5f820">nsh_scalar_handler_rw</a>(name,  type,  get_cb,  size,  set_cb)&#160;&#160;&#160;_nsh_scalar_handler(name, type, 0, get_cb, size, 0, set_cb)</td></tr>
-<tr class="separator:a4cd0bef8bdd973e39f6f16a6eee5f820"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af298d485c310e151ece29123a5af6288"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nsh_8h.html#af298d485c310e151ece29123a5af6288">nsh_scalar_str_handler_rw</a>(name,  get_cb,  max_length,  set_cb)&#160;&#160;&#160;_nsh_scalar_handler(name, ASN_OCTET_STR, 0, get_cb, max_length, 1, set_cb)</td></tr>
-<tr class="separator:af298d485c310e151ece29123a5af6288"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa13854743034b98f7d9b187025f52cc8"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nsh_8h.html#aa13854743034b98f7d9b187025f52cc8">nsh_scalar_group_handler_rw</a>(name,  type,  id,  get_cb,  size,  isstring,  set_cb)&#160;&#160;&#160;_nsh_scalar_handler(name, type, id, get_cb, size, isstring, set_cb)</td></tr>
-<tr class="separator:aa13854743034b98f7d9b187025f52cc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a6d3ed85ed8179ffd42fbe95dbaef95"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nsh_8h.html#a2a6d3ed85ed8179ffd42fbe95dbaef95">nsh_scalar_handler_rw</a>(name,  type,  <a class="el" href="nsh_8h.html#a2c6092410f81be40f2e654f54eb00457">nsh_get_cb</a>,  size,  <a class="el" href="nsh_8h.html#aad1f039be711c0d64147cb7c050d7f8d">nsh_set_cb</a>)&#160;&#160;&#160;_nsh_scalar_handler(name, type, 0, <a class="el" href="nsh_8h.html#a2c6092410f81be40f2e654f54eb00457">nsh_get_cb</a>, size, 0, <a class="el" href="nsh_8h.html#aad1f039be711c0d64147cb7c050d7f8d">nsh_set_cb</a>)</td></tr>
+<tr class="separator:a2a6d3ed85ed8179ffd42fbe95dbaef95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac26e48b8cace0edb31d40fd71e4c8ac5"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nsh_8h.html#ac26e48b8cace0edb31d40fd71e4c8ac5">nsh_scalar_str_handler_rw</a>(name,  <a class="el" href="nsh_8h.html#a2c6092410f81be40f2e654f54eb00457">nsh_get_cb</a>,  max_length,  <a class="el" href="nsh_8h.html#aad1f039be711c0d64147cb7c050d7f8d">nsh_set_cb</a>)&#160;&#160;&#160;_nsh_scalar_handler(name, ASN_OCTET_STR, 0, <a class="el" href="nsh_8h.html#a2c6092410f81be40f2e654f54eb00457">nsh_get_cb</a>, max_length, 1, <a class="el" href="nsh_8h.html#aad1f039be711c0d64147cb7c050d7f8d">nsh_set_cb</a>)</td></tr>
+<tr class="separator:ac26e48b8cace0edb31d40fd71e4c8ac5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5d6821c765551326728862fd04eb450"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nsh_8h.html#aa5d6821c765551326728862fd04eb450">nsh_scalar_group_handler_rw</a>(name,  type,  id,  <a class="el" href="nsh_8h.html#a2c6092410f81be40f2e654f54eb00457">nsh_get_cb</a>,  size,  isstring,  <a class="el" href="nsh_8h.html#aad1f039be711c0d64147cb7c050d7f8d">nsh_set_cb</a>)&#160;&#160;&#160;_nsh_scalar_handler(name, type, id, <a class="el" href="nsh_8h.html#a2c6092410f81be40f2e654f54eb00457">nsh_get_cb</a>, size, isstring, <a class="el" href="nsh_8h.html#aad1f039be711c0d64147cb7c050d7f8d">nsh_set_cb</a>)</td></tr>
+<tr class="separator:aa5d6821c765551326728862fd04eb450"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed66d54a2babe0a92d399ed40ceb737c"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nsh_8h.html#aed66d54a2babe0a92d399ed40ceb737c">nsh_table</a>(name,  get_first_cb,  get_next_cb,  free_cb,  table_data,  head,  num_table,  index_list,  num_indexes)</td></tr>
+<tr class="separator:aed66d54a2babe0a92d399ed40ceb737c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:a2c6092410f81be40f2e654f54eb00457"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nsh_8h.html#a2c6092410f81be40f2e654f54eb00457">nsh_get_cb</a>) (void *value, int len, int id)</td></tr>
+<tr class="separator:a2c6092410f81be40f2e654f54eb00457"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad1f039be711c0d64147cb7c050d7f8d"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="nsh_8h.html#aad1f039be711c0d64147cb7c050d7f8d">nsh_set_cb</a>) (void *value, int id)</td></tr>
+<tr class="separator:aad1f039be711c0d64147cb7c050d7f8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Macro Definition Documentation</h2>
 <a class="anchor" id="a6afc4a9ba4df6a73b4989ff95aad066f"></a>
@@ -139,8 +149,9 @@ Macros</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>This function will register a read-only scalar handler callback for the defined OID. The name of the callback function is based on the input parameter <em>name</em>, which means that <em>name</em> shall also be the input to the scalar create function which will handle the OID. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="scalar_group_ro_8c-example.html#a1">scalar_group_ro.c</a>, <a class="el" href="scalar_int_8c-example.html#a1">scalar_int.c</a>, <a class="el" href="scalar_ro_8c-example.html#a1">scalar_ro.c</a>, and <a class="el" href="scalar_str_ro_8c-example.html#a1">scalar_str_ro.c</a>.</dd>
+<p>This function will register a read-only scalar handler callback for the defined OID. The name of the callback function is based on the input parameter <em>name</em>, which means that <em>name</em> shall also be the input to the scalar create function which will handle the OID.</p>
+<dl class="section return"><dt>Returns</dt><dd>MIB_REGISTERED_OK is returned on success. Failures are MIB_REGISTRATION_FAILED and MIB_DUPLICATE_REGISTRATION. </dd></dl>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="scalar_const_8c-example.html#a1">scalar_const.c</a>, <a class="el" href="scalar_group_ro_8c-example.html#a1">scalar_group_ro.c</a>, <a class="el" href="scalar_ro_8c-example.html#a1">scalar_ro.c</a>, and <a class="el" href="scalar_str_ro_8c-example.html#a1">scalar_str_ro.c</a>.</dd>
 </dl>
 </div>
 </div>
@@ -163,7 +174,8 @@ Macros</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>This function will register a read-write scalar handler callback for the defined OID. The name of the callback function is based on the input parameter <em>name</em>, which means that <em>name</em> shall also be the input to the scalar create function which will handle the OID. </p>
+<p>This function will register a read-write scalar handler callback for the defined OID. The name of the callback function is based on the input parameter <em>name</em>, which means that <em>name</em> shall also be the input to the scalar create function which will handle the OID.</p>
+<dl class="section return"><dt>Returns</dt><dd>MIB_REGISTERED_OK is returned on success. Failures are MIB_REGISTRATION_FAILED and MIB_DUPLICATE_REGISTRATION. </dd></dl>
 
 </div>
 </div>
@@ -225,12 +237,13 @@ Macros</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>This function will create a grouped read-only scalar handler callback function. This function will behave in the same maner as <a class="el" href="nsh_8h.html#afe8d30c7633f2d8cb5ed57dc60979c5f">nsh_scalar_handler_ro()</a> except that a <em>id</em> is used to distinguish different OID requests. A common <em>callback</em> can therefore be shared between several created handlers. If the <em>isstring</em> parameter is set, the function behaves as <a class="el" href="nsh_8h.html#a43cf01aa7e0dc1580aca4308c95b8c78">nsh_scalar_str_handler_ro()</a> with repect to the string length. The callback function name will be based on the input parameter <em>name</em>, which should be the same parameter used when registering the OID, i.e with </p>
+<p>This function will create a grouped read-only scalar handler callback function. This function will behave in the same maner as <a class="el" href="nsh_8h.html#afe8d30c7633f2d8cb5ed57dc60979c5f">nsh_scalar_handler_ro()</a> except that a <em>id</em> is used to distinguish different OID requests. A common <em>callback</em> can therefore be shared between several created handlers. If the <em>isstring</em> parameter is set, the function behaves as <a class="el" href="nsh_8h.html#a43cf01aa7e0dc1580aca4308c95b8c78">nsh_scalar_str_handler_ro()</a>, i.e. with repect to the string length. The callback function name will be based on the input parameter <em>name</em>, which should be the same parameter used when registering the OID, i.e with <a class="el" href="nsh_8h.html#a6afc4a9ba4df6a73b4989ff95aad066f">nsh_register_scalar_ro()</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>MIB_REGISTERED_OK is returned on success. Failures are MIB_REGISTRATION_FAILED and MIB_DUPLICATE_REGISTRATION. </dd></dl>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="scalar_group_ro_8c-example.html#a0">scalar_group_ro.c</a>.</dd>
 </dl>
 </div>
 </div>
-<a class="anchor" id="aa13854743034b98f7d9b187025f52cc8"></a>
+<a class="anchor" id="aa5d6821c765551326728862fd04eb450"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -256,7 +269,7 @@ Macros</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname">get_cb, </td>
+          <td class="paramname"><a class="el" href="nsh_8h.html#a2c6092410f81be40f2e654f54eb00457">nsh_get_cb</a>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -274,12 +287,12 @@ Macros</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname">set_cb&#160;</td>
+          <td class="paramname"><a class="el" href="nsh_8h.html#aad1f039be711c0d64147cb7c050d7f8d">nsh_set_cb</a>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;_nsh_scalar_handler(name, type, id, get_cb, size, isstring, set_cb)</td>
+          <td></td><td>&#160;&#160;&#160;_nsh_scalar_handler(name, type, id, <a class="el" href="nsh_8h.html#a2c6092410f81be40f2e654f54eb00457">nsh_get_cb</a>, size, isstring, <a class="el" href="nsh_8h.html#aad1f039be711c0d64147cb7c050d7f8d">nsh_set_cb</a>)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -288,26 +301,33 @@ Macros</h2></td></tr>
     <tr><td class="paramname">name</td><td>OID define, without the <em>oid_</em> prefix. </td></tr>
     <tr><td class="paramname">type</td><td>OID type. ASN_COUNTER, ASN_INTEGER, ASN_TIMETICKS, ASN_UNSIGNED, ASN_IPADDRESS, ASN_OCTET_STR or ASN_OBJECT_ID. </td></tr>
     <tr><td class="paramname">id</td><td>Group identifier for this request. </td></tr>
-    <tr><td class="paramname">get_cb</td><td>Callback function to get return value by a request. </td></tr>
+    <tr><td class="paramname">nsh_get_cb</td><td>Callback function to get return value by a request. </td></tr>
     <tr><td class="paramname">size</td><td>Data length of handled value. </td></tr>
     <tr><td class="paramname">isstring</td><td>Set if value is a string. </td></tr>
-    <tr><td class="paramname">set_cb</td><td>Callback function to set value by a request.</td></tr>
+    <tr><td class="paramname">nsh_set_cb</td><td>Callback function to set value by a request.</td></tr>
   </table>
   </dd>
 </dl>
-<p>This function will create a grouped read-write scalar handler callback function. This function will behave in the same maner as <a class="el" href="nsh_8h.html#a4cd0bef8bdd973e39f6f16a6eee5f820">nsh_scalar_handler_rw()</a> except that a <em>id</em> is used to distinguish different OID requests. A common read callback, <em>get_cb</em>, and a common write callback, <em>set_cb</em>, can therefore be shared between several created handlers. If the <em>isstring</em> parameter is set, the function behaves as <a class="el" href="nsh_8h.html#af298d485c310e151ece29123a5af6288">nsh_scalar_str_handler_rw()</a> with repect to the string length. The callback function name will be based on the input parameter <em>name</em>, which should be the same parameter used when registering the OID, i.e with </p>
+<p>This function will create a grouped read-write scalar handler callback function. This function will behave in the same maner as <a class="el" href="nsh_8h.html#a2a6d3ed85ed8179ffd42fbe95dbaef95">nsh_scalar_handler_rw()</a> except that a <em>id</em> is used to distinguish different OID requests. A common read callback, <em>nsh_get_cb</em>, and a common write callback, <em>nsh_set_cb</em>, can therefore be shared between several created handlers. If the <em>isstring</em> parameter is set, the function behaves as <a class="el" href="nsh_8h.html#ac26e48b8cace0edb31d40fd71e4c8ac5">nsh_scalar_str_handler_rw()</a>, i.e. with repect to the string length. The callback function name will be based on the input parameter <em>name</em>, which should be the same parameter used when registering the OID, i.e with <a class="el" href="nsh_8h.html#ae0f69efd83afd6a3ea57507a3ec87d13">nsh_register_scalar_rw()</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>MIB_REGISTERED_OK is returned on success. Failures are MIB_REGISTRATION_FAILED and MIB_DUPLICATE_REGISTRATION. </dd></dl>
 
 </div>
 </div>
-<a class="anchor" id="af04870c5584bbe471897ebb496cb6b23"></a>
+<a class="anchor" id="a0b0cd3005d981e2566b531b2c0bde005"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">#define nsh_scalar_handler_int</td>
+          <td class="memname">#define nsh_scalar_handler_const</td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname">name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">type, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -318,19 +338,21 @@ Macros</h2></td></tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;_nsh_scalar_handler(name, ASN_INTEGER, 0, NULL, sizeof(long), value, NULL)</td>
+          <td></td><td>&#160;&#160;&#160;_nsh_scalar_handler(name, type, 0, NULL, sizeof(long), value, NULL)</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Create a constant integer scalar OID handler. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Create a constant scalar OID handler. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>OID define, without the <em>oid_</em> prefix. </td></tr>
-    <tr><td class="paramname">value</td><td>Integer value to be returned by a request.</td></tr>
+    <tr><td class="paramname">type</td><td>OID type. ASN_COUNTER, ASN_INTEGER, ASN_TIMETICKS, ASN_UNSIGNED or ASN_IPADDRESS. </td></tr>
+    <tr><td class="paramname">value</td><td>Value to be returned by a request.</td></tr>
   </table>
   </dd>
 </dl>
-<p>This function will create a scalar handler callback function which will return a constant integer value. The callback function name will be based on the input parameter <em>name</em>, which should be the same parameter used when registering the OID, i.e with <a class="el" href="nsh_8h.html#a6afc4a9ba4df6a73b4989ff95aad066f">nsh_register_scalar_ro()</a>. </p>
-<dl><dt><b>Examples: </b></dt><dd><a class="el" href="scalar_int_8c-example.html#a0">scalar_int.c</a>.</dd>
+<p>This function will create a scalar handler callback function which will return a constant value. The callback function name will be based on the input parameter <em>name</em>, which should be the same parameter used when registering the OID, i.e with <a class="el" href="nsh_8h.html#a6afc4a9ba4df6a73b4989ff95aad066f">nsh_register_scalar_ro()</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>MIB_REGISTERED_OK is returned on success. Failures are MIB_REGISTRATION_FAILED and MIB_DUPLICATE_REGISTRATION. </dd></dl>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="scalar_const_8c-example.html#a0">scalar_const.c</a>.</dd>
 </dl>
 </div>
 </div>
@@ -378,12 +400,13 @@ Macros</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>This function will create a read-only scalar handler callback function which will return the value from the <em>callback</em> function. If a string value is to be returned, consider using <a class="el" href="nsh_8h.html#a43cf01aa7e0dc1580aca4308c95b8c78">nsh_scalar_str_handler_ro()</a> instead, else the string returned will always be <em>size</em> long. The callback function name will be based on the input parameter <em>name</em>, which should be the same parameter used when registering the OID, i.e with <a class="el" href="nsh_8h.html#a6afc4a9ba4df6a73b4989ff95aad066f">nsh_register_scalar_ro()</a>. </p>
+<p>This function will create a read-only scalar handler callback function which will return the value from the <em>callback</em> function. If a string value is to be returned, consider using <a class="el" href="nsh_8h.html#a43cf01aa7e0dc1580aca4308c95b8c78">nsh_scalar_str_handler_ro()</a> instead, else the string returned will always be <em>size</em> long. The callback function name will be based on the input parameter <em>name</em>, which should be the same parameter used when registering the OID, i.e with <a class="el" href="nsh_8h.html#a6afc4a9ba4df6a73b4989ff95aad066f">nsh_register_scalar_ro()</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>MIB_REGISTERED_OK is returned on success. Failures are MIB_REGISTRATION_FAILED and MIB_DUPLICATE_REGISTRATION. </dd></dl>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="scalar_ro_8c-example.html#a0">scalar_ro.c</a>.</dd>
 </dl>
 </div>
 </div>
-<a class="anchor" id="a4cd0bef8bdd973e39f6f16a6eee5f820"></a>
+<a class="anchor" id="a2a6d3ed85ed8179ffd42fbe95dbaef95"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -403,7 +426,7 @@ Macros</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname">get_cb, </td>
+          <td class="paramname"><a class="el" href="nsh_8h.html#a2c6092410f81be40f2e654f54eb00457">nsh_get_cb</a>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -415,12 +438,12 @@ Macros</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname">set_cb&#160;</td>
+          <td class="paramname"><a class="el" href="nsh_8h.html#aad1f039be711c0d64147cb7c050d7f8d">nsh_set_cb</a>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;_nsh_scalar_handler(name, type, 0, get_cb, size, 0, set_cb)</td>
+          <td></td><td>&#160;&#160;&#160;_nsh_scalar_handler(name, type, 0, <a class="el" href="nsh_8h.html#a2c6092410f81be40f2e654f54eb00457">nsh_get_cb</a>, size, 0, <a class="el" href="nsh_8h.html#aad1f039be711c0d64147cb7c050d7f8d">nsh_set_cb</a>)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -428,13 +451,14 @@ Macros</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">name</td><td>OID define, without the <em>oid_</em> prefix. </td></tr>
     <tr><td class="paramname">type</td><td>OID type. ASN_COUNTER, ASN_INTEGER, ASN_TIMETICKS, ASN_UNSIGNED, ASN_IPADDRESS, ASN_OCTET_STR or ASN_OBJECT_ID. </td></tr>
-    <tr><td class="paramname">get_cb</td><td>Callback function to get return value by a request. </td></tr>
+    <tr><td class="paramname">nsh_get_cb</td><td>Callback function to get return value by a request. </td></tr>
     <tr><td class="paramname">size</td><td>Data length of handled value. </td></tr>
-    <tr><td class="paramname">set_cb</td><td>Callback function to set value by a request.</td></tr>
+    <tr><td class="paramname">nsh_set_cb</td><td>Callback function to set value by a request.</td></tr>
   </table>
   </dd>
 </dl>
-<p>This function will create a read-write scalar handler callback function. A read request to the OID object will return the value from the <em>get_cb</em> callback function. A write request will pass the value to the <em>set_cb</em> callback function. If a string value is to* be handler, consider using <a class="el" href="nsh_8h.html#af298d485c310e151ece29123a5af6288">nsh_scalar_str_handler_rw()</a> instead, else the string returned will always be <em>size</em> long. The callback function name will be based on the input parameter <em>name</em>, which should be the same parameter used when registering the OID, i.e with <a class="el" href="nsh_8h.html#a6afc4a9ba4df6a73b4989ff95aad066f">nsh_register_scalar_ro()</a>. </p>
+<p>This function will create a read-write scalar handler callback function. A read request to the OID object will return the value from the <em>nsh_get_cb</em> callback function. A write request will pass the value to the <em>nsh_set_cb</em> callback function. If a string value is to be handled, consider using <a class="el" href="nsh_8h.html#ac26e48b8cace0edb31d40fd71e4c8ac5">nsh_scalar_str_handler_rw()</a> instead, else the string returned will always be <em>size</em> long. The callback function name will be based on the input parameter <em>name</em>, which should be the same parameter used when registering the OID, i.e with <a class="el" href="nsh_8h.html#ae0f69efd83afd6a3ea57507a3ec87d13">nsh_register_scalar_rw()</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>MIB_REGISTERED_OK is returned on success. Failures are MIB_REGISTRATION_FAILED and MIB_DUPLICATE_REGISTRATION. </dd></dl>
 
 </div>
 </div>
@@ -475,12 +499,13 @@ Macros</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>This function will create a read-only string handler callback function which will return the string from the <em>callback</em> function. The function is similar to <a class="el" href="nsh_8h.html#afe8d30c7633f2d8cb5ed57dc60979c5f">nsh_scalar_handler_ro()</a> except it will return a string with correct length instead of a string of <em>max_length</em> (filled with unknown data at the end of the string). The callback function name will be based on the input parameter <em>name</em>, which should be the same parameter used when registering the OID, i.e with </p>
+<p>This function will create a read-only string handler callback function which will return the string from the <em>callback</em> function. The function is similar to <a class="el" href="nsh_8h.html#afe8d30c7633f2d8cb5ed57dc60979c5f">nsh_scalar_handler_ro()</a> except it will return a string with the correct length, i.e. the actual string length instead of the maximum length of the string. The callback function name will be based on the input parameter <em>name</em>, which should be the same parameter used when registering the OID, i.e with <a class="el" href="nsh_8h.html#a6afc4a9ba4df6a73b4989ff95aad066f">nsh_register_scalar_ro()</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>MIB_REGISTERED_OK is returned on success. Failures are MIB_REGISTRATION_FAILED and MIB_DUPLICATE_REGISTRATION. </dd></dl>
 <dl><dt><b>Examples: </b></dt><dd><a class="el" href="scalar_str_ro_8c-example.html#a0">scalar_str_ro.c</a>.</dd>
 </dl>
 </div>
 </div>
-<a class="anchor" id="af298d485c310e151ece29123a5af6288"></a>
+<a class="anchor" id="ac26e48b8cace0edb31d40fd71e4c8ac5"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
@@ -494,7 +519,7 @@ Macros</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname">get_cb, </td>
+          <td class="paramname"><a class="el" href="nsh_8h.html#a2c6092410f81be40f2e654f54eb00457">nsh_get_cb</a>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -506,25 +531,164 @@ Macros</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname">set_cb&#160;</td>
+          <td class="paramname"><a class="el" href="nsh_8h.html#aad1f039be711c0d64147cb7c050d7f8d">nsh_set_cb</a>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td>&#160;&#160;&#160;_nsh_scalar_handler(name, ASN_OCTET_STR, 0, get_cb, max_length, 1, set_cb)</td>
+          <td></td><td>&#160;&#160;&#160;_nsh_scalar_handler(name, ASN_OCTET_STR, 0, <a class="el" href="nsh_8h.html#a2c6092410f81be40f2e654f54eb00457">nsh_get_cb</a>, max_length, 1, <a class="el" href="nsh_8h.html#aad1f039be711c0d64147cb7c050d7f8d">nsh_set_cb</a>)</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Create a read-write string OID handler. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">name</td><td>OID define, without the <em>oid_</em> prefix. </td></tr>
-    <tr><td class="paramname">get_cb</td><td>Callback function to get string value by a request. </td></tr>
+    <tr><td class="paramname">nsh_get_cb</td><td>Callback function to get string value by a request. </td></tr>
     <tr><td class="paramname">max_length</td><td>Maximum length of returned string. </td></tr>
-    <tr><td class="paramname">set_cb</td><td>Callback function to set value by a request.</td></tr>
+    <tr><td class="paramname">nsh_set_cb</td><td>Callback function to set value by a request.</td></tr>
   </table>
   </dd>
 </dl>
-<p>This function will create a read-write string handler callback function. The function is similar to <a class="el" href="nsh_8h.html#a4cd0bef8bdd973e39f6f16a6eee5f820">nsh_scalar_handler_rw()</a> except it will return a string with correct length instead of a string of <em>max_length</em> (filled with unknown data at the end of the string). The callback function name will be based on the input parameter <em>name</em>, which should be the same parameter used when registering the OID, i.e with </p>
+<p>This function will create a read-write string handler callback function. The function is similar to <a class="el" href="nsh_8h.html#a2a6d3ed85ed8179ffd42fbe95dbaef95">nsh_scalar_handler_rw()</a> except it will return a string with the correct length, i.e. the actual string length instead of the maximum length of the string. The callback function name will be based on the input parameter <em>name</em>, which should be the same parameter used when registering the OID, i.e with <a class="el" href="nsh_8h.html#ae0f69efd83afd6a3ea57507a3ec87d13">nsh_register_scalar_rw()</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>MIB_REGISTERED_OK is returned on success. Failures are MIB_REGISTRATION_FAILED and MIB_DUPLICATE_REGISTRATION. </dd></dl>
+
+</div>
+</div>
+<a class="anchor" id="aed66d54a2babe0a92d399ed40ceb737c"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define nsh_table</td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">name, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">get_first_cb, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">get_next_cb, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">free_cb, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">table_data, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">head, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">num_table, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">index_list, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname">num_indexes&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<b>Value:</b><div class="fragment"><div class="line">nsh_table_get_next(get_next_cb, table_data, index_list, num_indexes) \</div>
+<div class="line">    nsh_table_get_first(get_first_cb, get_next_cb, head)        \</div>
+<div class="line">    nsh_table_free(free_cb, table_data, head)           \</div>
+<div class="line">    nsh_table_reg_t name = {.free       = free_cb,          \</div>
+<div class="line">                .get_first  = get_first_cb,     \</div>
+<div class="line">                .get_next   = get_next_cb,      \</div>
+<div class="line">                .idx        = index_list,       \</div>
+<div class="line">                .num_idx    = num_indexes,      \</div>
+<div class="line">                .min_column = NSH_DFLT_MIN_COLUMN,  \</div>
+<div class="line">                .max_column = num_table,        \</div>
+<div class="line">                .timeout    = NSH_DFLT_TIMEOUT,     \</div>
+<div class="line">    };</div>
+</div><!-- fragment --><p>Create table handlers. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">name</td><td>Name of table registration object. </td></tr>
+    <tr><td class="paramname">get_first_cb</td><td>Name of table get first handler. </td></tr>
+    <tr><td class="paramname">get_next_cb</td><td>Name of table get next handler. </td></tr>
+    <tr><td class="paramname">free_cb</td><td>Name of table free handler. </td></tr>
+    <tr><td class="paramname">table_data</td><td>Table data struct. </td></tr>
+    <tr><td class="paramname">head</td><td>Head of table data. </td></tr>
+    <tr><td class="paramname">num_table</td><td>Number of entries in table data struct. </td></tr>
+    <tr><td class="paramname">index_list</td><td>Table index struct. </td></tr>
+    <tr><td class="paramname">num_indexes</td><td>Number of indexes in table index struct.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>This function will create table handlers to get first table element, get next table element and to empty all table elements. </p>
+<dl><dt><b>Examples: </b></dt><dd><a class="el" href="table_8c-example.html#a0">table.c</a>.</dd>
+</dl>
+</div>
+</div>
+<h2 class="groupheader">Typedef Documentation</h2>
+<a class="anchor" id="a2c6092410f81be40f2e654f54eb00457"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef int(* nsh_get_cb) (void *value, int len, int id)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Callback to get (read) value for a get request. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>Pointer to variable which should be <b>set</b> to the value that is to be returned by a get request. </td></tr>
+    <tr><td class="paramname">len</td><td>Data size (or maximum data size) of <em>value</em>. </td></tr>
+    <tr><td class="paramname">id</td><td>ID for the requested OID.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>This callback shall set <em>value</em> to the value which should be returned by a get request. <em>len</em> specifies the data size (or maximum data size) for the requested object. <em>id</em> is used to distinguish the requested OID from others OIDs if the callback is shared between several OID handlers. If the callback is only used for one OID, <em>id</em> can be ignored. </p>
+
+</div>
+</div>
+<a class="anchor" id="aad1f039be711c0d64147cb7c050d7f8d"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef int(* nsh_set_cb) (void *value, int id)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Callback to set (write) value for a set request. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">value</td><td>Pointer to variable which holds the value from a set request. </td></tr>
+    <tr><td class="paramname">id</td><td>ID for the requested OID.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>This callback shall use <em>value</em> to update the value which should be set by a set request. <em>id</em> is used to distinguish the requested OID from others OIDs if the callback is shared between several OID handlers. If the callback is only used for one OID, <em>id</em> can be ignored. </p>
 
 </div>
 </div>

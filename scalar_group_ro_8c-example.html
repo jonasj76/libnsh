@@ -24,7 +24,7 @@
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
    <div id="projectname">libnsh
-   &#160;<span id="projectnumber">0.2</span>
+   &#160;<span id="projectnumber">0.3</span>
    </div>
    <div id="projectbrief">Net-SNMP helper C-library</div>
   </td>
@@ -80,17 +80,35 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">scalar_group_ro.c</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><span class="comment">/* libnsh example -- Groups. Use one callback for several OIDs.</span></div>
+<div class="fragment"><div class="line"><span class="comment">/* libnsh example - Use one callback for several OIDs</span></div>
 <div class="line"><span class="comment"> *</span></div>
-<div class="line"><span class="comment"> * This example will register two OIDs, 1.3.6.1.4.1.8072.9999.9999.1</span></div>
-<div class="line"><span class="comment"> * and 1.3.6.1.4.1.8072.9999.9999.2.</span></div>
-<div class="line"><span class="comment"> * .1 will return a random value, and .2 will return a string.</span></div>
+<div class="line"><span class="comment"> * Copyright (c) 2016  Jonas Johansson &lt;jonasj76@gmail.com&gt;</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * Permission is hereby granted, free of charge, to any person obtaining a copy</span></div>
+<div class="line"><span class="comment"> * of this software and associated documentation files (the &quot;Software&quot;), to deal</span></div>
+<div class="line"><span class="comment"> * in the Software without restriction, including without limitation the rights</span></div>
+<div class="line"><span class="comment"> * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span></div>
+<div class="line"><span class="comment"> * copies of the Software, and to permit persons to whom the Software is</span></div>
+<div class="line"><span class="comment"> * furnished to do so, subject to the following conditions:</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * The above copyright notice and this permission notice shall be included in</span></div>
+<div class="line"><span class="comment"> * all copies or substantial portions of the Software.</span></div>
+<div class="line"><span class="comment"> *</span></div>
+<div class="line"><span class="comment"> * THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span></div>
+<div class="line"><span class="comment"> * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span></div>
+<div class="line"><span class="comment"> * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span></div>
+<div class="line"><span class="comment"> * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></div>
+<div class="line"><span class="comment"> * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></div>
+<div class="line"><span class="comment"> * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN</span></div>
+<div class="line"><span class="comment"> * THE SOFTWARE.</span></div>
 <div class="line"><span class="comment"> */</span></div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor">#include &lt;stdlib.h&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;time.h&gt;</span></div>
 <div class="line"></div>
-<div class="line"><span class="preprocessor">#include &quot;<a class="code" href="nsh_8h.html">nsh.h</a>&quot;</span></div>
+<div class="line"><span class="preprocessor">#include &lt;<a class="code" href="nsh_8h.html">nsh.h</a>&gt;</span></div>
+<div class="line"></div>
+<div class="line"><span class="preprocessor">#include &quot;agent.h&quot;</span></div>
 <div class="line"></div>
 <div class="line"><span class="preprocessor">#define oid_netSnmpPlaypen 1, 3, 6, 1, 4, 1, 8072, 9999, 9999</span></div>
 <div class="line"><span class="preprocessor">#define oid_exampleOidOne  oid_netSnmpPlaypen, 1</span></div>
@@ -105,7 +123,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line">{</div>
 <div class="line">    <span class="keywordflow">switch</span>(<span class="keywordtype">id</span>) {</div>
 <div class="line">    <span class="keywordflow">case</span> ID_1:</div>
-<div class="line">        *(<span class="keywordtype">long</span>*)value = rand() % 100;</div>
+<div class="line">        *(<span class="keywordtype">long</span>*)value = 10;</div>
 <div class="line">        <span class="keywordflow">break</span>;</div>
 <div class="line">    <span class="keywordflow">case</span> ID_2:</div>
 <div class="line">        snprintf((<span class="keywordtype">char</span>*)value, len, <span class="stringliteral">&quot;OID string&quot;</span>);</div>
@@ -120,14 +138,21 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"></div>
 <div class="line"><span class="keywordtype">int</span> main(<span class="keywordtype">void</span>)</div>
 <div class="line">{</div>
-<div class="line">    srand(time(NULL));</div>
+<div class="line">    <span class="keywordtype">int</span> err = 0;</div>
 <div class="line"></div>
-<div class="line">    <span class="comment">/* TODO: Code to setup SNMP daemon */</span></div>
+<div class="line">    <span class="comment">/* Init SNMP subagent */</span></div>
+<div class="line">    agent_init();</div>
 <div class="line"></div>
-<div class="line">    <a name="a1"></a><a class="code" href="nsh_8h.html#a6afc4a9ba4df6a73b4989ff95aad066f">nsh_register_scalar_ro</a>(exampleOidOne);</div>
-<div class="line">    <a class="code" href="nsh_8h.html#a6afc4a9ba4df6a73b4989ff95aad066f">nsh_register_scalar_ro</a>(exampleOidTwo);</div>
+<div class="line">    <span class="comment">/* Register OIDs */</span></div>
+<div class="line">    err += <a name="a1"></a><a class="code" href="nsh_8h.html#a6afc4a9ba4df6a73b4989ff95aad066f">nsh_register_scalar_ro</a>(exampleOidOne);</div>
+<div class="line">    err += <a class="code" href="nsh_8h.html#a6afc4a9ba4df6a73b4989ff95aad066f">nsh_register_scalar_ro</a>(exampleOidTwo);</div>
+<div class="line">    <span class="keywordflow">if</span> (err) {</div>
+<div class="line">        fprintf(stderr, <span class="stringliteral">&quot;Error registering OID(s)\n&quot;</span>);</div>
+<div class="line">        <span class="keywordflow">return</span> err;</div>
+<div class="line">    }</div>
 <div class="line"></div>
-<div class="line">    <span class="comment">/* TODO: Event loop for SNMP requests */</span></div>
+<div class="line">    <span class="comment">/* Event loop to handle SNMP requests */</span></div>
+<div class="line">    agent_event_loop();</div>
 <div class="line">}</div>
 <div class="line"></div>
 </div><!-- fragment --> </div><!-- contents -->
