@@ -48,42 +48,42 @@ static int _nsh_register_table(const char*              name,
 		return MIB_REGISTRATION_FAILED;
 
 	table_info = SNMP_MALLOC_TYPEDEF(netsnmp_table_registration_info);
-	if (!table_info)
-		goto err_reg;
+	if (!table_info) {
+		netsnmp_handler_registration_free(reg);
+		return MIB_REGISTRATION_FAILED;
+	}
 	for (i = 0; i < table_reg->num_idx; i++)
 		netsnmp_table_helper_add_index(table_info, table_reg->idx[i].type);
 	table_info->min_column = table_reg->min_column;
 	table_info->max_column = table_reg->max_column;
 
 	iinfo = SNMP_MALLOC_TYPEDEF(netsnmp_iterator_info);
-	if (!iinfo)
-		goto err_table_info;
+	if (!iinfo) {
+		netsnmp_table_registration_info_free(table_info);
+		netsnmp_handler_registration_free(reg);
+		return MIB_REGISTRATION_FAILED;
+	}
 	iinfo->get_first_data_point = table_reg->get_first;
 	iinfo->get_next_data_point  = table_reg->get_next;
 	iinfo->table_reginfo        = table_info;
 
 	ret = netsnmp_register_table_iterator2(reg, iinfo);
 	if (ret != MIB_REGISTERED_OK)
-		goto err_iinfo;
+		return ret;
 
 	handler = netsnmp_get_cache_handler(table_reg->timeout, table_load_hook, table_reg->free, table_oid, oid_len);
-	if (!handler)
-		goto err_iinfo;
+	if (!handler) {
+		netsnmp_iterator_delete_table(iinfo);
+		return MIB_REGISTRATION_FAILED;
+	}
 
 	ret = netsnmp_inject_handler_before(reg, handler, TABLE_ITERATOR_NAME);
-	if (ret != SNMPERR_SUCCESS)
-		goto err_iinfo;
+	if (ret != SNMPERR_SUCCESS) {
+		netsnmp_iterator_delete_table(iinfo);
+		return MIB_REGISTRATION_FAILED;
+	}
 
 	return MIB_REGISTERED_OK;
-
-err_iinfo:
-	SNMP_FREE(iinfo);
-err_table_info:
-	netsnmp_table_registration_info_free(table_info);
-err_reg:
-	netsnmp_handler_registration_free(reg);
-
-	return MIB_REGISTRATION_FAILED;
 }
 
 int nsh_register_table_ro(const char*              name,
